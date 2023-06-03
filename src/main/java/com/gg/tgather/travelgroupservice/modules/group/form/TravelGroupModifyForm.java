@@ -4,21 +4,17 @@ import com.gg.tgather.commonservice.enums.TravelTheme;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Data;
 
-@Getter
-@Setter
-public class TravelGroupSaveForm {
+@Data
+public class TravelGroupModifyForm {
 
     @NotEmpty(message = "여행 만남명이 누락되었습니다.")
     private String groupName;
 
-    @NotEmpty(message = "여행 테마를 하나 이상 선택 해 주세요.")
+    @NotEmpty(message = "여행 테마를 하나 이상 선택 해주세요.")
     private Set<TravelTheme> travelThemes;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @NotNull(message = "모임 시작일자를 선택해 주세요.")
     private String startDate;
 

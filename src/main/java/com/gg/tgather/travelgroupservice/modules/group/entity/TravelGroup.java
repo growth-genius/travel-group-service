@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +35,10 @@ public class TravelGroup extends UpdatedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "travel_group_id")
     private Long id;
 
     /* 여행 만남 이름 */
+    @Column(unique = true)
     private String groupName;
 
     /* 여행 테마 (복수 선택 가능 )*/
@@ -62,8 +63,11 @@ public class TravelGroup extends UpdatedEntity {
     @OneToMany(mappedBy = "travelGroup", fetch = FetchType.LAZY)
     private final List<TravelGroupMember> travelGroupMemberList = new ArrayList<>();
 
-    /** 삭제여부 */
+    /** 삭제 여부 */
     private boolean deleteTravelGroup;
+
+    /** 삭제 시점 */
+    private LocalDateTime deleteTravelGroupAt;
 
     public TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
         this.groupName = travelGroupSaveForm.getGroupName();
@@ -90,5 +94,10 @@ public class TravelGroup extends UpdatedEntity {
         this.startDate = travelGroupModifyForm.getStartDate();
         this.open = travelGroupModifyForm.isOpen();
         this.limitParticipantCount = travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT;
+    }
+
+    public void deleteTravelGroup() {
+        this.deleteTravelGroup = true;
+        this.deleteTravelGroupAt = LocalDateTime.now();
     }
 }

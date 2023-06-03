@@ -46,6 +46,10 @@ public class TravelGroupMember {
         return new TravelGroupMember(travelGroup, accountId, travelGroupRole);
     }
 
+    public static TravelGroupMember createTravelGroupLeader(TravelGroup travelGroup, String accountId) {
+        return of(travelGroup, accountId, TravelGroupRole.LEADER);
+    }
+
     public void addMember() {
         this.travelGroup.getTravelGroupMemberList().add(this);
         this.travelGroup.plusParticipant();
