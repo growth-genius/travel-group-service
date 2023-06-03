@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.entity;
+package com.gg.tgather.travelgroupservice.modules.group.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

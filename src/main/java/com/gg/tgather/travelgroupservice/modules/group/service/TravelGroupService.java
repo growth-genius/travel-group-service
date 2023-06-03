@@ -1,12 +1,13 @@
-package com.gg.tgather.travelgroupservice.modules.service;
+package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
-import com.gg.tgather.travelgroupservice.modules.dto.TravelGroupDto;
-import com.gg.tgather.travelgroupservice.modules.entity.TravelGroup;
-import com.gg.tgather.travelgroupservice.modules.form.TravelGroupSaveForm;
-import com.gg.tgather.travelgroupservice.modules.form.TravelGroupSearchForm;
-import com.gg.tgather.travelgroupservice.modules.repository.TravelGroupRepository;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSearchForm;
+import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -39,11 +40,24 @@ public class TravelGroupService {
     /**
      * TravelGroup 검색하기
      *
-     * @param travelGroupSearchForm
-     * @return
+     * @param travelGroupSearchForm travelGroup 검색 폼
+     * @return TravelGroupDto travelGroup 검색 결과
      */
     public List<TravelGroupDto> findTravelGroupByTheme(TravelGroupSearchForm travelGroupSearchForm) {
         return travelGroupRepository.searchTravelGroupAllByTravelThemes(travelGroupSearchForm.getTravelThemes());
     }
 
+    /**
+     * TravelGroup 정보 수정하기
+     *
+     * @param travelGroupModifyForm travelGroup 수정 폼
+     * @return TravelGroupDto travelGroup 수정 결과
+     */
+    public TravelGroupDto modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm) {
+        TravelGroup travelGroup = travelGroupRepository.findByGroupName(travelGroupModifyForm.getGroupName())
+            .orElseThrow(() -> new OmittedRequireFieldException("travelGroup을 찾을 수 없습니다."));
+
+        travelGroup.modifyTravelGroup(travelGroupModifyForm);
+        return TravelGroupDto.from(travelGroup);
+    }
 }

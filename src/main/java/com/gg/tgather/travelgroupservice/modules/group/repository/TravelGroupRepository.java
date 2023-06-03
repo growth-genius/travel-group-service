@@ -1,6 +1,6 @@
-package com.gg.tgather.travelgroupservice.modules.repository;
+package com.gg.tgather.travelgroupservice.modules.group.repository;
 
-import com.gg.tgather.travelgroupservice.modules.entity.TravelGroup;
+import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

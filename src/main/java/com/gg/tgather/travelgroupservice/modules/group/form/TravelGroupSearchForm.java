@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.form;
+package com.gg.tgather.travelgroupservice.modules.group.form;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import java.util.Set;

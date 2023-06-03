@@ -1,8 +1,8 @@
-package com.gg.tgather.travelgroupservice.modules.validator;
+package com.gg.tgather.travelgroupservice.modules.group.validator;
 
 
 import com.gg.tgather.commonservice.utils.TimeUtil;
-import com.gg.tgather.travelgroupservice.modules.form.TravelGroupSaveForm;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;

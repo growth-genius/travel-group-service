@@ -1,8 +1,9 @@
-package com.gg.tgather.travelgroupservice.modules.entity;
+package com.gg.tgather.travelgroupservice.modules.group.entity;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.jpa.UpdatedEntity;
-import com.gg.tgather.travelgroupservice.modules.form.TravelGroupSaveForm;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -61,6 +62,9 @@ public class TravelGroup extends UpdatedEntity {
     @OneToMany(mappedBy = "travelGroup", fetch = FetchType.LAZY)
     private final List<TravelGroupMember> travelGroupMemberList = new ArrayList<>();
 
+    /** 삭제여부 */
+    private boolean deleteTravelGroup;
+
     public TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
         this.groupName = travelGroupSaveForm.getGroupName();
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
@@ -81,4 +85,10 @@ public class TravelGroup extends UpdatedEntity {
         this.participantCount--;
     }
 
+    public void modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm) {
+        this.travelThemes = travelGroupModifyForm.getTravelThemes();
+        this.startDate = travelGroupModifyForm.getStartDate();
+        this.open = travelGroupModifyForm.isOpen();
+        this.limitParticipantCount = travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT;
+    }
 }

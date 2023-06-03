@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.form;
+package com.gg.tgather.travelgroupservice.modules.group.form;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,5 +28,4 @@ public class TravelGroupSaveForm {
 
     /** 참여자 제한 수 */
     private int limitParticipantCount;
-
 }
