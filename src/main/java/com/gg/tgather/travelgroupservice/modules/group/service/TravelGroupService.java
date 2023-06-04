@@ -40,6 +40,11 @@ public class TravelGroupService {
         return TravelGroupDto.from(travelGroup);
     }
 
+    /**
+     * 그룹명 유효여부 확인
+     *
+     * @param travelGroupName 여행그룹명
+     */
     private void validTravelGroup(String travelGroupName) {
         travelGroupRepository.findByGroupName(travelGroupName).ifPresent(m -> {
             throw new OmittedRequireFieldException("동일한 여행그룹명이 있습니다.");
@@ -60,7 +65,7 @@ public class TravelGroupService {
      * TravelGroup 정보 수정하기
      *
      * @param travelGroupModifyForm travelGroup 수정 폼
-     * @param authentication
+     * @param authentication        인증정보
      * @return TravelGroupDto travelGroup 수정 결과
      */
     public TravelGroupDto modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
@@ -71,12 +76,25 @@ public class TravelGroupService {
         return TravelGroupDto.from(travelGroup);
     }
 
+    /**
+     * 본인 그룹을 제외한 그룹명 있는지 확인
+     *
+     * @param travelGroupName 여행 그룹명
+     * @param travelGroupId   고유 그룹 id
+     */
     private void validTravelGroupWithoutOwn(String travelGroupName, Long travelGroupId) {
         travelGroupRepository.searchByTravelGroupNameWithoutOwn(travelGroupName, travelGroupId).ifPresent(m -> {
             throw new OmittedRequireFieldException("동일한 여행그룹명이 있습니다.");
         });
     }
 
+    /**
+     * 여행그룹 삭제
+     *
+     * @param travelGroupName 여행 그룹명
+     * @param authentication  인증정보
+     * @return boolean 삭제 여부
+     */
     public Boolean deleteTravelGroup(String travelGroupName, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
