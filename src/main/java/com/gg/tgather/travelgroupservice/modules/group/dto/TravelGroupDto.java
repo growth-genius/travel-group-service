@@ -14,10 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TravelGroupDto {
 
+    /** 여행그룹명 */
     private String groupName;
 
+    /** 여행테마 */
     private Set<TravelTheme> travelThemes;
 
+    /** 총참여자수 */
     private int totalMember;
 
     public TravelGroupDto(TravelGroup travelGroup) {
