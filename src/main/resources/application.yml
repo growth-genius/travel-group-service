@@ -6,6 +6,10 @@ spring:
       on-profile: default
   application:
     name: travel-group-service
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 1000
   h2:
     console:
       enabled: true
