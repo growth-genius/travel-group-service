@@ -12,4 +12,7 @@ public interface TravelGroupRepositoryQuerydsl {
     List<TravelGroupDto> searchTravelGroupAllByTravelThemes(Set<TravelTheme> travelThemes);
 
     Optional<TravelGroup> searchByTravelGroupAndLeader(String groupName, String accountId);
+
+    Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, Long travelGroupId);
+
 }

@@ -32,6 +32,12 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
                 .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER).and(travelGroupMember.accountId.eq(accountId)))).fetchOne());
     }
 
+    @Override
+    public Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, Long travelGroupId) {
+        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
+            .where(travelGroup.groupName.eq(travelGroupName).and(travelGroup.id.ne(travelGroupId))).fetchOne());
+    }
+
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
         BooleanExpression contains = null;

@@ -66,9 +66,15 @@ public class TravelGroupService {
     public TravelGroupDto modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupModifyForm.getGroupName(), authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
-        validTravelGroup(travelGroupModifyForm.getGroupName());
+        validTravelGroupWithoutOwn(travelGroupModifyForm.getGroupName(), travelGroup.getId());
         travelGroup.modifyTravelGroup(travelGroupModifyForm);
         return TravelGroupDto.from(travelGroup);
+    }
+
+    private void validTravelGroupWithoutOwn(String travelGroupName, Long travelGroupId) {
+        travelGroupRepository.searchByTravelGroupNameWithoutOwn(travelGroupName, travelGroupId).ifPresent(m -> {
+            throw new OmittedRequireFieldException("동일한 여행그룹명이 있습니다.");
+        });
     }
 
     public Boolean deleteTravelGroup(String travelGroupName, JwtAuthentication authentication) {
