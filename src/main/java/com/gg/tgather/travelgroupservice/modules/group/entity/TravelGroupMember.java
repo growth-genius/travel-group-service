@@ -50,14 +50,20 @@ public class TravelGroupMember {
         return of(travelGroup, accountId, TravelGroupRole.LEADER);
     }
 
-    public void addMember() {
-        this.travelGroup.getTravelGroupMemberList().add(this);
-        this.travelGroup.plusParticipant();
+    public boolean addMember() {
+        if (this.travelGroup.plusParticipant()) {
+            this.travelGroup.getTravelGroupMemberList().add(this);
+            return true;
+        }
+        return false;
     }
 
-    public void removeMember() {
-        this.travelGroup.getTravelGroupMemberList().remove(this);
-        this.travelGroup.minusParticipant();
+    public boolean removeMember() {
+        if (this.travelGroup.minusParticipant()) {
+            this.travelGroup.getTravelGroupMemberList().remove(this);
+            return true;
+        }
+        return false;
     }
 
 }

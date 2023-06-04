@@ -1,5 +1,7 @@
 package com.gg.tgather.travelgroupservice.modules.group.entity;
 
+import static com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup.ParticipantCount.MAX_PARTICIPANT_COUNT;
+
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.jpa.UpdatedEntity;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
@@ -30,8 +32,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @NamedEntityGraph(name = "TravelGroup.withTravelThemes", attributeNodes = {@NamedAttributeNode("travelThemes")})
 public class TravelGroup extends UpdatedEntity {
-
-    private static final int MAX_PARTICIPANT_COUNT = 999;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,30 +74,54 @@ public class TravelGroup extends UpdatedEntity {
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
         this.startDate = travelGroupSaveForm.getStartDate();
         this.open = travelGroupSaveForm.isOpen();
-        this.limitParticipantCount = travelGroupSaveForm.isLimitedParticipant() ? travelGroupSaveForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT;
+        this.limitParticipantCount =
+            travelGroupSaveForm.isLimitedParticipant() ? travelGroupSaveForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
 
     public static TravelGroup from(TravelGroupSaveForm travelGroupSaveForm) {
         return new TravelGroup(travelGroupSaveForm);
     }
 
-    public void plusParticipant() {
+    public boolean plusParticipant() {
+        if (this.limitParticipantCount + 1 == this.participantCount) {
+            return false;
+        }
         this.participantCount++;
+        return true;
     }
 
-    public void minusParticipant() {
-        this.participantCount--;
+    public boolean minusParticipant() {
+        if (this.participantCount > 1) {
+            this.participantCount--;
+            return true;
+        }
+        return false;
     }
 
     public void modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm) {
         this.travelThemes = travelGroupModifyForm.getTravelThemes();
         this.startDate = travelGroupModifyForm.getStartDate();
         this.open = travelGroupModifyForm.isOpen();
-        this.limitParticipantCount = travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT;
+        this.limitParticipantCount =
+            travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
 
     public void deleteTravelGroup() {
         this.deleteTravelGroup = true;
         this.deleteTravelGroupAt = LocalDateTime.now();
+    }
+
+    enum ParticipantCount {
+        MAX_PARTICIPANT_COUNT(999);
+
+        private final int count;
+
+        ParticipantCount(int count) {
+            this.count = count;
+        }
+
+        public int getCount() {
+            return count;
+        }
     }
 }
