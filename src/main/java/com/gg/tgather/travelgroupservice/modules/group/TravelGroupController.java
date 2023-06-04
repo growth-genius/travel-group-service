@@ -20,7 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+/**
+ * 여행그룹 CRUD Restful API
+ *
+ * @author joyeji
+ * @since 2023.06.04
+ */
 @RestBaseAnnotation
 @RequestMapping("/travel-group")
 @RequiredArgsConstructor
