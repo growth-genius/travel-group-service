@@ -6,16 +6,6 @@ spring:
       on-profile: default
   application:
     name: travel-group-service
-  jpa:
-    properties:
-      hibernate:
-        default_batch_fetch_size: 1000
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /h2-console
   flyway:
     baseline-on-migrate: true
 eureka:
