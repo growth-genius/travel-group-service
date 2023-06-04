@@ -40,22 +40,15 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     }
 
     private void createTravelGroupWithTest(String travelGroupName) {
-        TravelGroupSaveForm travelGroupSaveForm = new TravelGroupSaveForm();
-        travelGroupSaveForm.setGroupName(travelGroupName);
-        travelGroupSaveForm.setTravelThemes(Set.of(TravelTheme.ACTIVITY));
-        travelGroupSaveForm.setStartDate("2023-10-01T09:45:00.000+02:00");
+        TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
         travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
     }
 
     @Test
     @DisplayName("travel group 생성 확인")
     void createTravelGroup() {
-        TravelGroupSaveForm travelGroupSaveForm = new TravelGroupSaveForm();
         String travelGroupName = "전국 여행일지";
-        travelGroupSaveForm.setGroupName(travelGroupName);
-        travelGroupSaveForm.setTravelThemes(Set.of(TravelTheme.ACTIVITY));
-        travelGroupSaveForm.setStartDate("2023-10-01T09:45:00.000+02:00");
-
+        TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
         TravelGroupDto travelGroupDto = travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
         assertEquals(travelGroupName, travelGroupDto.getGroupName());
     }
@@ -63,12 +56,13 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     @Test
     @DisplayName("travel group 수정 확인")
     void modifyTravelGroup() {
-        String groupName = "전국 여행일지";
+        String groupName = "전국 맛집탐방";
         createTravelGroupWithTest(groupName);
         TravelGroupModifyForm travelGroupModifyForm = new TravelGroupModifyForm();
         travelGroupModifyForm.setGroupName(groupName);
         travelGroupModifyForm.setTravelThemes(Set.of(TravelTheme.FOOD));
         travelGroupModifyForm.setStartDate("2023-10-01T09:45:00.000+02:00");
+        // TODO 내가 수정한 TravelGroup외에 다른 곳에 TravelGroupName이 같은지 찾기
         TravelGroupDto travelGroupDto = travelGroupService.modifyTravelGroup(travelGroupModifyForm, getAuthentication());
         assertTrue(travelGroupDto.getTravelThemes().contains(TravelTheme.FOOD));
     }

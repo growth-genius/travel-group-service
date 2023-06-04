@@ -30,4 +30,16 @@ public class TravelGroupSaveForm {
 
     /** 참여자 제한 수 */
     private int limitParticipantCount;
+
+    /** 테스트용도 생성자 */
+    private TravelGroupSaveForm(String travelGroupName, Set<TravelTheme> travelThemes, String startDate) {
+        this.groupName = travelGroupName;
+        this.travelThemes = travelThemes;
+        this.startDate = startDate;
+    }
+
+    /** 테스트용도 */
+    public static TravelGroupSaveForm createTravelGroupSaveFormForTest(String travelGroupName) {
+        return new TravelGroupSaveForm(travelGroupName, Set.of(TravelTheme.ACTIVITY), "2023-10-01T09:45:00.000+02:00");
+    }
 }

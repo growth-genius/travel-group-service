@@ -3,7 +3,6 @@ package com.gg.tgather.travelgroupservice.modules.group.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
@@ -12,7 +11,6 @@ import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthenticatio
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +28,8 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
     private TravelGroupService travelGroupService;
 
     private void createTravelGroup() {
-        TravelGroupSaveForm travelGroupSaveForm = new TravelGroupSaveForm();
         String travelGroupName = "전국 여행일지";
-        travelGroupSaveForm.setGroupName(travelGroupName);
-        travelGroupSaveForm.setTravelThemes(Set.of(TravelTheme.ACTIVITY));
-        travelGroupSaveForm.setStartDate("2023-10-01T09:45:00.000+02:00");
+        TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
         travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
     }
 
@@ -51,7 +46,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
         String travelGroupName = "전국 여행일지";
         createTravelGroup();
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
         // then
         assertEquals(travelGroupName, travelGroup.getGroupName());
     }
@@ -63,7 +58,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
         String travelGroupName = "전국 여행일지";
         createTravelGroup();
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
         travelGroup.deleteTravelGroup();
         // then
         assertTrue(travelGroup.isDeleteTravelGroup());

@@ -64,7 +64,7 @@ public class TravelGroupService {
      * @return TravelGroupDto travelGroup 수정 결과
      */
     public TravelGroupDto modifyTravelGroup(TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupAndLeader(travelGroupModifyForm.getGroupName(), authentication.accountId())
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupModifyForm.getGroupName(), authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
         validTravelGroup(travelGroupModifyForm.getGroupName());
         travelGroup.modifyTravelGroup(travelGroupModifyForm);
@@ -72,7 +72,7 @@ public class TravelGroupService {
     }
 
     public Boolean deleteTravelGroup(String travelGroupName, JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupAndLeader(travelGroupName, authentication.accountId())
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
         travelGroup.deleteTravelGroup();
         return true;

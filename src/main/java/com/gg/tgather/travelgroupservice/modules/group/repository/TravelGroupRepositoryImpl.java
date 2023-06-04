@@ -26,10 +26,10 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
     }
 
     @Override
-    public Optional<TravelGroup> searchTravelGroupAndLeader(String groupName, String accountId) {
+    public Optional<TravelGroup> searchByTravelGroupAndLeader(String groupName, String accountId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin().where(
             travelGroup.groupName.eq(groupName)
-                .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER).and(travelGroupMember.accountId.eq(accountId)))).fetchFirst());
+                .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER).and(travelGroupMember.accountId.eq(accountId)))).fetchOne());
     }
 
 
