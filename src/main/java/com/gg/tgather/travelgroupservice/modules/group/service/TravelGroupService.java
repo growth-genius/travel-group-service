@@ -15,6 +15,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 여행그룹 CRUD 서비스
+ *
+ * @author joyeji
+ * @since 2023.06.04
+ */
 @Slf4j
 @BaseServiceAnnotation
 @RequiredArgsConstructor
@@ -25,10 +31,10 @@ public class TravelGroupService {
     private final TravelGroupMemberRepository travelGroupMemberRepository;
 
     /**
-     * TravelGroup 생성
+     * 여행그룹 생성
      *
      * @param travelGroupSaveForm travelGroup 입력폼
-     * @param authentication
+     * @param authentication      인증정보
      * @return travelGroupDto travelGroup 생성 결과값
      */
     public TravelGroupDto createTravelGroup(TravelGroupSaveForm travelGroupSaveForm, JwtAuthentication authentication) {
@@ -41,7 +47,7 @@ public class TravelGroupService {
     }
 
     /**
-     * 그룹명 유효여부 확인
+     * 여행그룹명 유효여부 확인
      *
      * @param travelGroupName 여행그룹명
      */
@@ -52,7 +58,7 @@ public class TravelGroupService {
     }
 
     /**
-     * TravelGroup 검색하기
+     * 여행그룹 검색하기
      *
      * @param travelGroupSearchForm travelGroup 검색 폼
      * @return TravelGroupDto travelGroup 검색 결과
@@ -62,7 +68,7 @@ public class TravelGroupService {
     }
 
     /**
-     * TravelGroup 정보 수정하기
+     * 여행그룹 정보 수정하기
      *
      * @param travelGroupModifyForm travelGroup 수정 폼
      * @param authentication        인증정보
