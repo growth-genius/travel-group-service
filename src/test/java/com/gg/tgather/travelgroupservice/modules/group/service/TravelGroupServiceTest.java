@@ -38,9 +38,9 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
         return (JwtAuthentication) authenticationToken.getPrincipal();
     }
 
-    private void createTravelGroupWithTest(String travelGroupName) {
+    private TravelGroupDto createTravelGroupWithTest(String travelGroupName) {
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
-        travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
+        return travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
     }
 
     @Test
@@ -56,23 +56,21 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     @DisplayName("travel group 수정 확인")
     void modifyTravelGroup() {
         String groupName = "전국 맛집탐방";
-        createTravelGroupWithTest(groupName);
+        TravelGroupDto createTravelGroup = createTravelGroupWithTest(groupName);
         TravelGroupModifyForm travelGroupModifyForm = new TravelGroupModifyForm();
         travelGroupModifyForm.setGroupName(groupName);
         travelGroupModifyForm.setTravelThemes(Set.of(TravelTheme.FOOD));
         travelGroupModifyForm.setStartDate("2023-10-01T09:45:00.000+02:00");
-        // TODO 내가 수정한 TravelGroup외에 다른 곳에 TravelGroupName이 같은지 찾기
-        TravelGroupDto travelGroupDto = travelGroupService.modifyTravelGroup(travelGroupModifyForm, getAuthentication());
+        TravelGroupDto travelGroupDto = travelGroupService.modifyTravelGroup(createTravelGroup.getTravelGroupId(), travelGroupModifyForm, getAuthentication());
         assertTrue(travelGroupDto.getTravelThemes().contains(TravelTheme.FOOD));
     }
 
     @Test
     @DisplayName("travel group 삭제 확인")
     void deleteTravelGroup() {
-        String groupName = "전국 여행일지";
-        createTravelGroupWithTest(groupName);
-        Boolean deleted = travelGroupService.deleteTravelGroup(groupName, getAuthentication());
-        TravelGroup travelGroup = travelGroupRepository.findByGroupName(groupName).orElseThrow();
+        TravelGroupDto travelGroupDto = createTravelGroupWithTest("TravelGroup");
+        Boolean deleted = travelGroupService.deleteTravelGroup(travelGroupDto.getTravelGroupId(), getAuthentication());
+        TravelGroup travelGroup = travelGroupRepository.findByGroupName("TravelGroup").orElseThrow();
         assertTrue(travelGroup.isDeleteTravelGroup());
         assertTrue(deleted);
     }

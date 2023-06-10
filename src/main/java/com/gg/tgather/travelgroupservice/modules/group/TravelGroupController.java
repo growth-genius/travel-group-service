@@ -9,6 +9,7 @@ import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSearchForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 여행그룹 CRUD Restful API
@@ -53,10 +55,10 @@ public class TravelGroupController {
      * @param authentication        계정 인증
      * @return TravelGroupDto 여행그룹 수정 결과
      */
-    @PatchMapping
-    public ApiUtil.ApiResult<TravelGroupDto> modifyTravelGroup(@RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm,
-        @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.modifyTravelGroup(travelGroupModifyForm, authentication));
+    @PatchMapping("/{travelGroupId}")
+    public ApiUtil.ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull Long travelGroupId,
+        @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm, @AuthenticationPrincipal JwtAuthentication authentication) {
+        return ApiUtil.success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
     }
 
     /**
@@ -67,7 +69,7 @@ public class TravelGroupController {
      * @return List<TravelGroupDto> 조건에 부합한 여행그룹들
      */
     @GetMapping
-    public ApiUtil.ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestBody TravelGroupSearchForm travelGroupSearchForm,
+    public ApiUtil.ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam TravelGroupSearchForm travelGroupSearchForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
         return ApiUtil.success(travelGroupService.findTravelGroupByTheme(travelGroupSearchForm));
     }
@@ -75,13 +77,13 @@ public class TravelGroupController {
     /**
      * 여행그룹 삭제 API
      *
-     * @param travelGroupName 여행그룹명
-     * @param authentication  계정 인증
+     * @param travelGroupId  여행그룹명
+     * @param authentication 계정 인증
      * @return Boolean 여행그룹 삭제 결과
      */
-    @DeleteMapping("/{travelGroupName}")
-    public ApiUtil.ApiResult<Boolean> deleteTravelGroup(@PathVariable String travelGroupName, @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.deleteTravelGroup(travelGroupName, authentication));
+    @DeleteMapping("/{travelGroupId}")
+    public ApiUtil.ApiResult<Boolean> deleteTravelGroup(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+        return ApiUtil.success(travelGroupService.deleteTravelGroup(travelGroupId, authentication));
     }
 
 }

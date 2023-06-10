@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class TravelGroupModifyForm {
 
-    @NotEmpty(message = "여행 만남명이 누락되었습니다.")
+    @NotEmpty(message = "여행 그룹명이 누락되었습니다.")
     private String groupName;
 
     @NotEmpty(message = "여행 테마를 하나 이상 선택 해주세요.")
