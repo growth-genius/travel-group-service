@@ -42,7 +42,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
 
     @Test
     @DisplayName("travelGroup 조회확인")
-    void test_case_1() {
+    void travelGroupGetTest() {
         // given
         TravelGroupDto travelGroupDto = createTravelGroup();
         // when
