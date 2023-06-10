@@ -26,10 +26,10 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
     }
 
     @Override
-    public Optional<TravelGroup> searchByTravelGroupAndLeader(String groupName, String accountId) {
-        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin().where(
-            travelGroup.groupName.eq(groupName)
-                .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER).and(travelGroupMember.accountId.eq(accountId)))).fetchOne());
+    public Optional<TravelGroup> searchByTravelGroupAndLeader(Long travelGroupId, String accountId) {
+        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup)).fetchJoin().where(
+                travelGroup.id.eq(travelGroupId).and(travelGroupMember.accountId.eq(accountId)).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER)))
+            .fetchOne());
     }
 
     @Override
@@ -38,6 +38,11 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
             .where(travelGroup.groupName.eq(travelGroupName).and(travelGroup.id.ne(travelGroupId))).fetchOne());
     }
 
+    @Override
+    public Optional<TravelGroup> searchTravelGroupByIdWithLeader(Long groupId) {
+        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
+            .where(travelGroup.id.eq(groupId).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
+    }
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
         BooleanExpression contains = null;
