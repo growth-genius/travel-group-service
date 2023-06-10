@@ -14,6 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TravelGroupDto {
 
+    /** 여행그룹 아이디 */
+    private Long travelGroupId;
+
     /** 여행그룹명 */
     private String groupName;
 
@@ -29,9 +32,10 @@ public class TravelGroupDto {
 
     public static TravelGroupDto from(TravelGroup travelGroup) {
         TravelGroupDto travelGroupDTO = new TravelGroupDto();
-        travelGroupDTO.setGroupName(travelGroup.getGroupName());
-        travelGroupDTO.setTravelThemes(travelGroup.getTravelThemes());
-        travelGroupDTO.setTotalMember(travelGroup.getTravelGroupMemberList().size());
+        travelGroupDTO.travelGroupId = travelGroup.getId();
+        travelGroupDTO.groupName = travelGroup.getGroupName();
+        travelGroupDTO.travelThemes = travelGroup.getTravelThemes();
+        travelGroupDTO.totalMember = travelGroup.getTravelGroupMemberList().size();
         return travelGroupDTO;
     }
 }
