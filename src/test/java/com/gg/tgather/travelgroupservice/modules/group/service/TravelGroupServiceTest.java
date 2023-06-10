@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.service;
+package com.gg.tgather.travelgroupservice.modules.group.service;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,6 @@ import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
-import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
