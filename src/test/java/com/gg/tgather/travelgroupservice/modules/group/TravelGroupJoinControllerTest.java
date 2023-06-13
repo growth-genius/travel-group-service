@@ -4,6 +4,7 @@ import static com.gg.tgather.travelgroupservice.modules.group.enums.GroupJoinSta
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.gg.tgather.commonservice.security.JwtAuthentication;
@@ -69,8 +70,10 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
     void test_case_1() throws Exception {
         // given
         TravelGroup travelGroup = savePrivateTravelGroupTest();
-        mockMvc.perform(get("/travel-group/{travelGroupId}/{status}/members", travelGroup.getId(), NO_APPROVED).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+                get("/travel-group/group-id/{travelGroupId}/status/{status}/members", travelGroup.getId(), NO_APPROVED).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].accountId").value("Member"))
+            .andExpect(jsonPath("$.response[0].approved").isBoolean()).andExpect(jsonPath("$.response[0].approved").value(false));
     }
 
     @NotNull
