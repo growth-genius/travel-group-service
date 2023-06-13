@@ -44,8 +44,14 @@ ext {
     set('testcontainersVersion', "1.17.6")
 }
 
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 dependencies {
-    implementation 'com.gg.tgather:common-service:1.0.4'
+    implementation('com.gg.tgather:common-service:1.0.1-SNAPSHOT') {
+        changing = true
+    }
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
@@ -61,7 +67,6 @@ dependencies {
     implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     implementation 'org.glassfish.jersey.core:jersey-common:3.1.1'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

@@ -8,6 +8,7 @@ import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
@@ -27,10 +28,9 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
     @Autowired
     private TravelGroupService travelGroupService;
 
-    private void createTravelGroup() {
-        String travelGroupName = "전국 여행일지";
+    private TravelGroupDto createTravelGroup(String travelGroupName) {
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
-        travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
+        return travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
     }
 
     private JwtAuthentication getAuthentication() {
@@ -41,24 +41,24 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
 
     @Test
     @DisplayName("travelGroup 조회확인")
-    void test_case_1() {
+    void travelGroupGetTest() {
         // given
-        String travelGroupName = "전국 여행일지";
-        createTravelGroup();
+        TravelGroupDto travelGroupDto = createTravelGroup("전국여행일지");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
+            .orElseThrow();
         // then
-        assertEquals(travelGroupName, travelGroup.getGroupName());
+        assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.getId());
     }
 
     @Test
     @DisplayName("travelGroup 삭제 확인")
     void travelGroupDelete() {
         // given
-        String travelGroupName = "전국 여행일지";
-        createTravelGroup();
+        TravelGroupDto travelGroupDto = createTravelGroup("전국 여행 일즤");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupName, getAuthentication().accountId()).orElseThrow();
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
+            .orElseThrow();
         travelGroup.deleteTravelGroup();
         // then
         assertTrue(travelGroup.isDeleteTravelGroup());

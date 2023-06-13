@@ -20,11 +20,11 @@ public interface TravelGroupRepositoryQuerydsl {
     /**
      * 본인이 생성한 travelGroup 검색
      *
-     * @param groupName 그룹명
-     * @param accountId 계정아이디
+     * @param travelGroupId 그룹명
+     * @param accountId     계정아이디
      * @return Optional<TravelGroup> 검색된 여행그룹 결과
      */
-    Optional<TravelGroup> searchByTravelGroupAndLeader(String groupName, String accountId);
+    Optional<TravelGroup> searchByTravelGroupAndLeader(Long travelGroupId, String accountId);
 
     /**
      * 본인 그룹을 제외한 그룹명 있는지 확인
@@ -34,5 +34,13 @@ public interface TravelGroupRepositoryQuerydsl {
      * @return Optional<TravelGroup> 검색된 여행그룹 결과
      */
     Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, Long travelGroupId);
+
+    /**
+     * 그룹명 검색후 Leader 찾기
+     *
+     * @param groupId 여행그룹명
+     * @return Optional<TravelGroup> 여행그룹
+     */
+    Optional<TravelGroup> searchTravelGroupByIdWithLeader(Long groupId);
 
 }

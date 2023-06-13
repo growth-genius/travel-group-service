@@ -69,7 +69,7 @@ public class TravelGroup extends UpdatedEntity {
     /** 삭제 시점 */
     private LocalDateTime deleteTravelGroupAt;
 
-    public TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
+    private TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
         this.groupName = travelGroupSaveForm.getGroupName();
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
         this.startDate = travelGroupSaveForm.getStartDate();
