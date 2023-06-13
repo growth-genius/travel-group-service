@@ -13,6 +13,7 @@ import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +81,9 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         // given
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest("Travel");
         Long travelGroupId = travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication()).getTravelGroupId();
-        TravelGroup travelGroup = travelGroupRepository.findById(travelGroupId).get();
-        TravelGroupMember travelGroupMember = travelGroupAddMember(travelGroup);
+        Optional<TravelGroup> optionalTravelGroup = travelGroupRepository.findById(travelGroupId);
+        assertTrue(optionalTravelGroup.isPresent());
+        TravelGroupMember travelGroupMember = travelGroupAddMember(optionalTravelGroup.get());
         // when
         Boolean disableMember = travelGroupMemberService.deleteTravelGroupMember(travelGroupId, travelGroupMember.getId(), getCommonAuthentication());
         // then
