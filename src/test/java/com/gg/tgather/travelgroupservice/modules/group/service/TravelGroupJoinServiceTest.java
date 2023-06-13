@@ -5,11 +5,10 @@ import static com.gg.tgather.travelgroupservice.modules.group.enums.GroupJoinSta
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
+import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
@@ -23,13 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
 @ServiceTest
 @WithMockJwtAuthentication
-class TravelGroupJoinServiceTest extends AbstractContainerBaseTest {
+class TravelGroupJoinServiceTest extends AbstractContainerBaseTest implements AbstractJwtAuthentication {
 
     @Autowired
     private TravelGroupJoinService travelGroupJoinService;
@@ -40,11 +37,6 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest {
     @Autowired
     private TravelGroupMemberRepository travelGroupMemberRepository;
 
-    private JwtAuthentication getAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) authentication;
-        return (JwtAuthentication) authenticationToken.getPrincipal();
-    }
 
     @Test
     @DisplayName("비공개 여행그룹 신청자 확인")
@@ -55,7 +47,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest {
         travelGroupAddMember(travelGroup, false);
         // when
         List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getId(), NO_APPROVED,
-            getAuthentication());
+            getCommonAuthentication());
         // then
         assertEquals(1, travelGroupMembersRequest.size());
         assertEquals("Member", travelGroupMembersRequest.get(0).getAccountId());
@@ -70,7 +62,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest {
         travelGroupAddMember(travelGroup, true);
         // when
         List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getId(), APPROVED,
-            getAuthentication());
+            getCommonAuthentication());
         // then
         assertEquals(2, travelGroupMembersRequest.size());
         assertEquals("Member", travelGroupMembersRequest.get(1).getAccountId());
@@ -92,7 +84,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest {
 
     @NotNull
     private TravelGroupMember saveTravelGroupLeader(TravelGroup travelGroup) {
-        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getAuthentication().accountId());
+        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId());
         travelGroupMemberRepository.save(travelGroupLeader);
         return travelGroupLeader;
     }
