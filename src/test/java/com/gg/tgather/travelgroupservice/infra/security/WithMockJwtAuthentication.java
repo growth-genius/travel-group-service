@@ -14,7 +14,6 @@ public @interface WithMockJwtAuthentication {
 
     String accountId() default "accountId";
 
-    String userName() default "관리자";
-
-
+    String nickname() default "관리자";
+    
 }
