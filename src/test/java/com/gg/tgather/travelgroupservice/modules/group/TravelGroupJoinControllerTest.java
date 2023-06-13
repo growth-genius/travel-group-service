@@ -33,9 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
 
     @Autowired
-    private TravelGroupJoinController travelGroupJoinController;
-
-    @Autowired
     private TravelGroupRepository travelGroupRepository;
 
     @Autowired
