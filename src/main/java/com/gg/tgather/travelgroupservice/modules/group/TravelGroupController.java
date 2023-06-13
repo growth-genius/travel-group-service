@@ -65,7 +65,7 @@ public class TravelGroupController {
     /**
      * 여행테마로 그룹 찾기 API
      *
-     * @param travelThemes   여행 그룹 검색 폼
+     * @param travelThemes   여행 테마
      * @param authentication 계정 인증
      * @return List<TravelGroupDto> 조건에 부합한 여행그룹들
      */
@@ -78,7 +78,7 @@ public class TravelGroupController {
     /**
      * 여행그룹 삭제 API
      *
-     * @param travelGroupId  여행그룹명
+     * @param travelGroupId  여행그룹 아이디
      * @param authentication 계정 인증
      * @return Boolean 여행그룹 삭제 결과
      */
