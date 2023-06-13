@@ -28,8 +28,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
     @Autowired
     private TravelGroupService travelGroupService;
 
-    private TravelGroupDto createTravelGroup() {
-        String travelGroupName = "전국 여행일지";
+    private TravelGroupDto createTravelGroup(String travelGroupName) {
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
         return travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
     }
@@ -44,7 +43,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
     @DisplayName("travelGroup 조회확인")
     void travelGroupGetTest() {
         // given
-        TravelGroupDto travelGroupDto = createTravelGroup();
+        TravelGroupDto travelGroupDto = createTravelGroup("전국여행일지");
         // when
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
             .orElseThrow();
@@ -56,7 +55,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
     @DisplayName("travelGroup 삭제 확인")
     void travelGroupDelete() {
         // given
-        TravelGroupDto travelGroupDto = createTravelGroup();
+        TravelGroupDto travelGroupDto = createTravelGroup("전국 여행 일즤");
         // when
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
             .orElseThrow();
