@@ -1,16 +1,17 @@
 package com.gg.tgather.travelgroupservice.modules.group;
 
 import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
+import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.utils.ApiUtil;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
-import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSearchForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -64,14 +65,14 @@ public class TravelGroupController {
     /**
      * 여행테마로 그룹 찾기 API
      *
-     * @param travelGroupSearchForm 여행 그룹 검색 폼
-     * @param authentication        계정 인증
+     * @param travelThemes   여행 그룹 검색 폼
+     * @param authentication 계정 인증
      * @return List<TravelGroupDto> 조건에 부합한 여행그룹들
      */
     @GetMapping
-    public ApiUtil.ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam TravelGroupSearchForm travelGroupSearchForm,
+    public ApiUtil.ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam Set<TravelTheme> travelThemes,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.findTravelGroupByTheme(travelGroupSearchForm));
+        return ApiUtil.success(travelGroupService.findTravelGroupByTheme(travelThemes));
     }
 
     /**

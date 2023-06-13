@@ -2,16 +2,17 @@ package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
+import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
-import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSearchForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,11 +61,11 @@ public class TravelGroupService {
     /**
      * 여행그룹 검색하기
      *
-     * @param travelGroupSearchForm travelGroup 검색 폼
+     * @param travelThemes travelGroup 검색 폼
      * @return TravelGroupDto travelGroup 검색 결과
      */
-    public List<TravelGroupDto> findTravelGroupByTheme(TravelGroupSearchForm travelGroupSearchForm) {
-        return travelGroupRepository.searchTravelGroupAllByTravelThemes(travelGroupSearchForm.getTravelThemes());
+    public List<TravelGroupDto> findTravelGroupByTheme(Set<TravelTheme> travelThemes) {
+        return travelGroupRepository.searchTravelGroupAllByTravelThemes(travelThemes);
     }
 
     /**
