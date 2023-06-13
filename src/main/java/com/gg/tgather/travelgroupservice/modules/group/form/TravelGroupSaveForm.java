@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TravelGroupSaveForm {
 
     @NotEmpty(message = "여행 만남명이 누락되었습니다.")
@@ -23,13 +25,13 @@ public class TravelGroupSaveForm {
     private String startDate;
 
     /** 여행그룹 공개 여부 확인 */
-    private boolean open;
+    private boolean open = true;
 
     /** 참여자 수 제한 여부 확인 */
-    private boolean limitedParticipant;
+    private boolean limitedParticipant = true;
 
     /** 참여자 제한 수 */
-    private int limitParticipantCount;
+    private int limitParticipantCount = 999;
 
     /** 테스트용도 생성자 */
     private TravelGroupSaveForm(String travelGroupName, Set<TravelTheme> travelThemes, String startDate) {
@@ -38,8 +40,21 @@ public class TravelGroupSaveForm {
         this.startDate = startDate;
     }
 
+    /** 테스트 용도 생성자 */
+    private TravelGroupSaveForm(String travelGroupName, Set<TravelTheme> travelThemes, String startDate, boolean open) {
+        this.groupName = travelGroupName;
+        this.travelThemes = travelThemes;
+        this.startDate = startDate;
+        this.open = open;
+    }
+
     /** 테스트용도 */
     public static TravelGroupSaveForm createTravelGroupSaveFormForTest(String travelGroupName) {
         return new TravelGroupSaveForm(travelGroupName, Set.of(TravelTheme.ACTIVITY), "2023-10-01T09:45:00.000+02:00");
+    }
+
+    /** 테스트 용도 */
+    public static TravelGroupSaveForm createPrivateGroupForTest(String travelGroupName) {
+        return new TravelGroupSaveForm(travelGroupName, Set.of(TravelTheme.ACTIVITY), "2023-10-01T09:45:00.000+02:00", false);
     }
 }
