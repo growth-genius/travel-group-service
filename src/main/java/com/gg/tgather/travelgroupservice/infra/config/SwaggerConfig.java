@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
 
-    Info info = new Info().version("v1.0.1").title("Travel-Group").description("Travel Group Info");
+    private final Info info = new Info().version("v1.0.1").title("Travel-Group").description("Travel Group Info");
 
     @Bean
     public GroupedOpenApi groupedOpenApi() {
@@ -23,9 +23,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("jwtAuth");
-
         Components components = new Components().addSecuritySchemes("jwtAuth",
             new SecurityScheme().name("jwtAuth").type(Type.HTTP).scheme("bearer").bearerFormat("JWT"));
 
