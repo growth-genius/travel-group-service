@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.gg.tgather.commonservice.enums.SearchTravelTheme;
 import com.gg.tgather.travelgroupservice.infra.annotation.MockMvcTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
@@ -53,13 +54,26 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
 
     @Test
     @DisplayName("비공개 그룹 승인 요청 멤버들 확인")
-    void test_case_1() throws Exception {
+    void privateTravelGroupRequestMembers() throws Exception {
         // given
         TravelGroup travelGroup = savePrivateTravelGroupTest();
         mockMvc.perform(
                 get("/travel-group/group-id/{travelGroupId}/status/{status}/members", travelGroup.getId(), NO_APPROVED).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].accountId").value("Member"))
             .andExpect(jsonPath("$.response[0].approved").isBoolean()).andExpect(jsonPath("$.response[0].approved").value(false));
+    }
+
+
+    @Test
+    @DisplayName("여행 그룹 조회")
+    void searchTravelGroup() throws Exception {
+        // given
+        savePrivateTravelGroupTest();
+        // when
+        // then
+        mockMvc.perform(get("/travel-group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
+            .andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].groupName").value("Travel"));
+
     }
 
     @NotNull
