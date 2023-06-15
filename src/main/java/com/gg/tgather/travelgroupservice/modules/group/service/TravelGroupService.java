@@ -65,7 +65,8 @@ public class TravelGroupService {
      * @return TravelGroupDto travelGroup 검색 결과
      */
     public List<TravelGroupDto> findTravelGroupByTheme(Set<TravelTheme> travelThemes) {
-        return travelGroupRepository.searchTravelGroupAllByTravelThemes(travelThemes);
+        List<TravelGroup> travelGroups = travelGroupRepository.searchTravelGroupAllByTravelThemes(travelThemes);
+        return travelGroups.stream().map(TravelGroupDto::from).toList();
     }
 
     /**

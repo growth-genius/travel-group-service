@@ -1,9 +1,11 @@
 package com.gg.tgather.travelgroupservice.modules.group;
 
+import static com.gg.tgather.commonservice.utils.ApiUtil.success;
+
 import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.utils.ApiUtil;
+import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
@@ -44,9 +46,9 @@ public class TravelGroupController {
      * @return TravelGroupDto 여행그룹 생성 결과
      */
     @PostMapping
-    public ApiUtil.ApiResult<TravelGroupDto> createTravelGroup(@RequestBody @Valid TravelGroupSaveForm travelGroupSaveForm,
+    public ApiResult<TravelGroupDto> createTravelGroup(@RequestBody @Valid TravelGroupSaveForm travelGroupSaveForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.createTravelGroup(travelGroupSaveForm, authentication));
+        return success(travelGroupService.createTravelGroup(travelGroupSaveForm, authentication));
     }
 
     /**
@@ -57,9 +59,9 @@ public class TravelGroupController {
      * @return TravelGroupDto 여행그룹 수정 결과
      */
     @PatchMapping("/{travelGroupId}")
-    public ApiUtil.ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull Long travelGroupId,
+    public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull Long travelGroupId,
         @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm, @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
+        return success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
     }
 
     /**
@@ -70,9 +72,9 @@ public class TravelGroupController {
      * @return List<TravelGroupDto> 조건에 부합한 여행그룹들
      */
     @GetMapping
-    public ApiUtil.ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam Set<TravelTheme> travelThemes,
+    public ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam Set<TravelTheme> travelThemes,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.findTravelGroupByTheme(travelThemes));
+        return success(travelGroupService.findTravelGroupByTheme(travelThemes));
     }
 
     /**
@@ -83,8 +85,8 @@ public class TravelGroupController {
      * @return Boolean 여행그룹 삭제 결과
      */
     @DeleteMapping("/{travelGroupId}")
-    public ApiUtil.ApiResult<Boolean> deleteTravelGroup(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupService.deleteTravelGroup(travelGroupId, authentication));
+    public ApiResult<Boolean> deleteTravelGroup(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+        return success(travelGroupService.deleteTravelGroup(travelGroupId, authentication));
     }
 
 }

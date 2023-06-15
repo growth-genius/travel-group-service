@@ -2,4 +2,4 @@ spring:
   cloud:
     config:
       uri: http://localhost:8888
-      name: travel-group-service, ecommerce, common, zipkin
+      name: test, ecommerce, common, zipkin

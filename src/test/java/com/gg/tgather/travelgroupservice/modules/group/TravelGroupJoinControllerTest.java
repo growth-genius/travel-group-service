@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
+import com.gg.tgather.commonservice.enums.SearchTravelTheme;
 import com.gg.tgather.travelgroupservice.infra.annotation.MockMvcTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
+import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
@@ -24,14 +24,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 
 @Slf4j
 @MockMvcTest
 @WithMockJwtAuthentication
-class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
+class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements AbstractJwtAuthentication {
 
     @Autowired
     private TravelGroupRepository travelGroupRepository;
@@ -41,17 +39,6 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    /**
-     * Mock 계정정보 가져오기
-     *
-     * @return
-     */
-    private JwtAuthentication getAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) authentication;
-        return (JwtAuthentication) authenticationToken.getPrincipal();
-    }
 
     private TravelGroup savePrivateTravelGroupTest() {
         TravelGroup travelGroup = saveTravelGroup();
@@ -67,7 +54,7 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
 
     @Test
     @DisplayName("비공개 그룹 승인 요청 멤버들 확인")
-    void test_case_1() throws Exception {
+    void privateTravelGroupRequestMembers() throws Exception {
         // given
         TravelGroup travelGroup = savePrivateTravelGroupTest();
         mockMvc.perform(
@@ -76,9 +63,22 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest {
             .andExpect(jsonPath("$.response[0].approved").isBoolean()).andExpect(jsonPath("$.response[0].approved").value(false));
     }
 
+
+    @Test
+    @DisplayName("여행 그룹 조회")
+    void searchTravelGroup() throws Exception {
+        // given
+        savePrivateTravelGroupTest();
+        // when
+        // then
+        mockMvc.perform(get("/travel-group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
+            .andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].groupName").value("Travel"));
+
+    }
+
     @NotNull
     private TravelGroupMember saveTravelGroupLeader(TravelGroup travelGroup) {
-        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getAuthentication().accountId());
+        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId());
         travelGroupMemberRepository.save(travelGroupLeader);
         return travelGroupLeader;
     }

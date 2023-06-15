@@ -1,9 +1,10 @@
 package com.gg.tgather.travelgroupservice.modules.group;
 
 
+import static com.gg.tgather.commonservice.utils.ApiUtil.success;
+
 import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.utils.ApiUtil;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupMemberService;
@@ -36,7 +37,7 @@ public class TravelGroupMemberController {
      */
     @PostMapping("/{travelGroupId}/member")
     public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, authentication));
+        return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, authentication));
     }
 
     /**
@@ -50,7 +51,7 @@ public class TravelGroupMemberController {
     @DeleteMapping("/{travelGroupId}/member/{memberId}")
     public ApiResult<Boolean> deleteTravelGroupMember(@PathVariable Long travelGroupId, @PathVariable Long memberId,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return ApiUtil.success(travelGroupMemberService.deleteTravelGroupMember(travelGroupId, memberId, authentication));
+        return success(travelGroupMemberService.deleteTravelGroupMember(travelGroupId, memberId, authentication));
     }
 
 }

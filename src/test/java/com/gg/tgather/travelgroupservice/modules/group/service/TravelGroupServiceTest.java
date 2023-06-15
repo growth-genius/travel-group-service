@@ -14,6 +14,7 @@ import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,6 +66,20 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest implements Abstra
         TravelGroup travelGroup = travelGroupRepository.findByGroupName("TravelGroup").orElseThrow();
         assertTrue(travelGroup.isDeleteTravelGroup());
         assertTrue(deleted);
+    }
+
+
+    @Test
+    @DisplayName("travel group 조회 확인")
+    void searchTravelGroup() {
+        // given
+        TravelGroupDto travelGroupDto = createTravelGroupWithTest("TravelGroup");
+        // when
+        List<TravelGroupDto> travelGroupByTheme = travelGroupService.findTravelGroupByTheme(travelGroupDto.getTravelThemes());
+        // then
+        assertEquals(1, travelGroupByTheme.size());
+        assertEquals("TravelGroup", travelGroupByTheme.get(0).getGroupName());
+        assertEquals(Set.of(TravelTheme.ACTIVITY), travelGroupByTheme.get(0).getTravelThemes());
     }
 
 }

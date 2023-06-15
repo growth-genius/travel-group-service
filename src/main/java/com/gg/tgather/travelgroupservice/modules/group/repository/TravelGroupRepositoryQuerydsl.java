@@ -1,7 +1,6 @@
 package com.gg.tgather.travelgroupservice.modules.group.repository;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
-import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,7 @@ public interface TravelGroupRepositoryQuerydsl {
      * @param travelThemes 여행테마들
      * @return List<TravelGroupDto> 검색된 여행그룹 결과
      */
-    List<TravelGroupDto> searchTravelGroupAllByTravelThemes(Set<TravelTheme> travelThemes);
+    List<TravelGroup> searchTravelGroupAllByTravelThemes(Set<TravelTheme> travelThemes);
 
     /**
      * 본인이 생성한 travelGroup 검색
