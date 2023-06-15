@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,10 @@ public class TravelGroupMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "travel_group_member_id")
     private Long id;
+
+    @Column(unique = true)
+    private String travelGroupMemberId;
+
     /* 여행 그룹 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "travel_group_id")
@@ -37,6 +42,7 @@ public class TravelGroupMember {
     private boolean approved;
 
     private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole) {
+        this.travelGroupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
@@ -44,6 +50,7 @@ public class TravelGroupMember {
     }
 
     private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole, boolean approved) {
+        this.travelGroupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
