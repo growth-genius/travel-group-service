@@ -3,11 +3,10 @@ package com.gg.tgather.travelgroupservice.modules.group.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
+import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
@@ -15,12 +14,10 @@ import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupServic
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @ServiceTest
 @WithMockJwtAuthentication
-class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
+class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest implements AbstractJwtAuthentication {
 
     @Autowired
     private TravelGroupRepository travelGroupRepository;
@@ -30,13 +27,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
 
     private TravelGroupDto createTravelGroup(String travelGroupName) {
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
-        return travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
-    }
-
-    private JwtAuthentication getAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) authentication;
-        return (JwtAuthentication) authenticationToken.getPrincipal();
+        return travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication());
     }
 
     @Test
@@ -45,7 +36,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
         // given
         TravelGroupDto travelGroupDto = createTravelGroup("전국여행일지");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getCommonAuthentication().accountId())
             .orElseThrow();
         // then
         assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.getId());
@@ -57,7 +48,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest {
         // given
         TravelGroupDto travelGroupDto = createTravelGroup("전국 여행 일즤");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getAuthentication().accountId())
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getCommonAuthentication().accountId())
             .orElseThrow();
         travelGroup.deleteTravelGroup();
         // then
