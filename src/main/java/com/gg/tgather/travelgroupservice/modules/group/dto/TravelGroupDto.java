@@ -4,6 +4,7 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class TravelGroupDto {
         TravelGroupDto travelGroupDTO = new TravelGroupDto();
         travelGroupDTO.travelGroupId = travelGroup.getId();
         travelGroupDTO.groupName = travelGroup.getGroupName();
-        travelGroupDTO.travelThemes = travelGroup.getTravelThemes();
+        travelGroupDTO.travelThemes = new HashSet<>(travelGroup.getTravelThemes());
         travelGroupDTO.totalMember = travelGroup.getTravelGroupMemberList().size();
         return travelGroupDTO;
     }
