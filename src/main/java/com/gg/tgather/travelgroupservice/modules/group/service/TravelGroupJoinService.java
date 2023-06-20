@@ -38,10 +38,10 @@ public class TravelGroupJoinService {
 
         return switch (status) {
             case NO_APPROVED ->
-                travelGroup.getTravelGroupMemberList().stream().filter(travelGroupMember -> !travelGroupMember.isApproved()).map(TravelGroupMemberDto::new)
+                travelGroup.getTravelGroupMemberList().stream().filter(travelGroupMember -> !travelGroupMember.isApproved()).map(TravelGroupMemberDto::from)
                     .toList();
-            case APPROVED -> travelGroup.getTravelGroupMemberList().stream().filter(TravelGroupMember::isApproved).map(TravelGroupMemberDto::new).toList();
-            default -> travelGroup.getTravelGroupMemberList().stream().map(TravelGroupMemberDto::new).toList();
+            case APPROVED -> travelGroup.getTravelGroupMemberList().stream().filter(TravelGroupMember::isApproved).map(TravelGroupMemberDto::from).toList();
+            default -> travelGroup.getTravelGroupMemberList().stream().map(TravelGroupMemberDto::from).toList();
         };
     }
 
