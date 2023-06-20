@@ -15,6 +15,7 @@ import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyFor
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,8 +64,9 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest implements Abstra
     void deleteTravelGroup() {
         TravelGroupDto travelGroupDto = createTravelGroupWithTest("TravelGroup");
         Boolean deleted = travelGroupService.deleteTravelGroup(travelGroupDto.getTravelGroupId(), getCommonAuthentication());
-        TravelGroup travelGroup = travelGroupRepository.findByGroupName("TravelGroup").orElseThrow();
-        assertTrue(travelGroup.isDeleteTravelGroup());
+        Optional<TravelGroup> travelGroup = travelGroupRepository.findByGroupName("TravelGroup");
+        assertTrue(travelGroup.isPresent());
+        assertTrue(travelGroup.get().isDeleteTravelGroup());
         assertTrue(deleted);
     }
 

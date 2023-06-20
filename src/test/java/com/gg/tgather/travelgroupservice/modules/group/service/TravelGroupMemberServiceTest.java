@@ -71,11 +71,12 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         TravelGroup travelGroup = createPublicTravelGroup();
         // when
         TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getId(), getCommonAuthentication());
-        TravelGroup validTravelGroup = travelGroupRepository.findById(travelGroup.getId()).orElseThrow();
+        Optional<TravelGroup> validTravelGroup = travelGroupRepository.findById(travelGroup.getId());
+        assertTrue(validTravelGroup.isPresent());
         // then
         assertTrue(travelGroupMemberDto.isApproved());
         assertNotNull(travelGroupMemberDto.getTravelGroupMemberId());
-        assertEquals(2, validTravelGroup.getTravelGroupMemberList().size());
+        assertEquals(2, validTravelGroup.get().getTravelGroupMemberList().size());
     }
 
 
