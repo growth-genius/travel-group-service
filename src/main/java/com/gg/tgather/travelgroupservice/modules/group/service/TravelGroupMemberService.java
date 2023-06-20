@@ -129,14 +129,13 @@ public class TravelGroupMemberService {
         }
 
         if (travelGroupMember.getAccountId().equals(authentication.accountId()) || validLeader) {
-            if (travelGroupMember.removeMember()) {
+            boolean availableRemoveMember = travelGroupMember.isAvailableRemoveMember();
+            if (availableRemoveMember) {
                 travelGroupMemberRepository.delete(travelGroupMember);
-                return true;
             }
-            return false;
-        } else {
-            throw new OmittedRequireFieldException("탈퇴할 권한이 없습니다.");
+            return availableRemoveMember;
         }
+        throw new OmittedRequireFieldException("탈퇴할 권한이 없습니다.");
     }
 
     /**
