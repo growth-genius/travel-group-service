@@ -129,7 +129,11 @@ public class TravelGroupMemberService {
         }
 
         if (travelGroupMember.getAccountId().equals(authentication.accountId()) || validLeader) {
-            return travelGroupMember.removeMember();
+            if (travelGroupMember.removeMember()) {
+                travelGroupMemberRepository.delete(travelGroupMember);
+                return true;
+            }
+            return false;
         } else {
             throw new OmittedRequireFieldException("탈퇴할 권한이 없습니다.");
         }
