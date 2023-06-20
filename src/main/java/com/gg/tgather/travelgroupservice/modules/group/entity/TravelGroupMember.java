@@ -109,7 +109,7 @@ public class TravelGroupMember {
         return false;
     }
 
-    public boolean removeMember() {
+    public boolean isAvailableRemoveMember() {
         if (this.travelGroup.minusParticipant()) {
             this.travelGroup.getTravelGroupMemberList().remove(this);
             return true;

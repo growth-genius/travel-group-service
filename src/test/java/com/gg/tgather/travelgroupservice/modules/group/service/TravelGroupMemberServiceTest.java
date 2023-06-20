@@ -1,6 +1,7 @@
 package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
@@ -70,8 +71,12 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         TravelGroup travelGroup = createPublicTravelGroup();
         // when
         TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getId(), getCommonAuthentication());
+        Optional<TravelGroup> validTravelGroup = travelGroupRepository.findById(travelGroup.getId());
+        assertTrue(validTravelGroup.isPresent());
         // then
         assertTrue(travelGroupMemberDto.isApproved());
+        assertNotNull(travelGroupMemberDto.getTravelGroupMemberId());
+        assertEquals(2, validTravelGroup.get().getTravelGroupMemberList().size());
     }
 
 

@@ -51,6 +51,7 @@ public class TravelGroupMemberService {
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
         TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, authentication.accountId(),
             validTravelGroup(travelGroup, authentication));
+        travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupMemberDto.from(travelGroupMember);
     }
 
@@ -128,10 +129,13 @@ public class TravelGroupMemberService {
         }
 
         if (travelGroupMember.getAccountId().equals(authentication.accountId()) || validLeader) {
-            return travelGroupMember.removeMember();
-        } else {
-            throw new OmittedRequireFieldException("탈퇴할 권한이 없습니다.");
+            boolean availableRemoveMember = travelGroupMember.isAvailableRemoveMember();
+            if (availableRemoveMember) {
+                travelGroupMemberRepository.delete(travelGroupMember);
+            }
+            return availableRemoveMember;
         }
+        throw new OmittedRequireFieldException("탈퇴할 권한이 없습니다.");
     }
 
     /**

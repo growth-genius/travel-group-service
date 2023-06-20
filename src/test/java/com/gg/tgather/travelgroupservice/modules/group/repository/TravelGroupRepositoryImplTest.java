@@ -11,6 +11,7 @@ import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,11 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest implements
         // given
         TravelGroupDto travelGroupDto = createTravelGroup("전국여행일지");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getCommonAuthentication().accountId())
-            .orElseThrow();
+        Optional<TravelGroup> travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(),
+            getCommonAuthentication().accountId());
+        assertTrue(travelGroup.isPresent());
         // then
-        assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.getId());
+        assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.get().getId());
     }
 
     @Test
@@ -48,11 +50,12 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest implements
         // given
         TravelGroupDto travelGroupDto = createTravelGroup("전국 여행 일즤");
         // when
-        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(), getCommonAuthentication().accountId())
-            .orElseThrow();
-        travelGroup.deleteTravelGroup();
+        Optional<TravelGroup> travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupDto.getTravelGroupId(),
+            getCommonAuthentication().accountId());
+        assertTrue(travelGroup.isPresent());
+        travelGroup.get().deleteTravelGroup();
         // then
-        assertTrue(travelGroup.isDeleteTravelGroup());
+        assertTrue(travelGroup.get().isDeleteTravelGroup());
     }
 
 }
