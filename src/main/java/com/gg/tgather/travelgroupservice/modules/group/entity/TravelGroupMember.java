@@ -23,10 +23,11 @@ public class TravelGroupMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "travel_group_member_id")
     private Long id;
 
     @Column(unique = true)
-    private String travelGroupMemberId;
+    private String groupMemberId;
 
     /* 여행 그룹 */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +42,7 @@ public class TravelGroupMember {
     private boolean approved;
 
     private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole) {
-        this.travelGroupMemberId = UUID.randomUUID().toString();
+        this.groupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
@@ -49,7 +50,7 @@ public class TravelGroupMember {
     }
 
     private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole, boolean approved) {
-        this.travelGroupMemberId = UUID.randomUUID().toString();
+        this.groupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
