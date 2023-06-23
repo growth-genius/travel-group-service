@@ -23,7 +23,7 @@ public interface TravelGroupRepositoryQuerydsl {
      * @param accountId     계정아이디
      * @return Optional<TravelGroup> 검색된 여행그룹 결과
      */
-    Optional<TravelGroup> searchByTravelGroupAndLeader(Long travelGroupId, String accountId);
+    Optional<TravelGroup> searchByTravelGroupAndLeader(String travelGroupId, String accountId);
 
     /**
      * 본인 그룹을 제외한 그룹명 있는지 확인
@@ -32,14 +32,14 @@ public interface TravelGroupRepositoryQuerydsl {
      * @param travelGroupId   본인 여행그룹 id
      * @return Optional<TravelGroup> 검색된 여행그룹 결과
      */
-    Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, Long travelGroupId);
+    Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, String travelGroupId);
 
     /**
      * 그룹명 검색후 Leader 찾기
      *
-     * @param groupId 여행그룹명
+     * @param travelGroupId 여행그룹명
      * @return Optional<TravelGroup> 여행그룹
      */
-    Optional<TravelGroup> searchTravelGroupByIdWithLeader(Long groupId);
+    Optional<TravelGroup> searchTravelGroupByIdWithLeader(String travelGroupId);
 
 }

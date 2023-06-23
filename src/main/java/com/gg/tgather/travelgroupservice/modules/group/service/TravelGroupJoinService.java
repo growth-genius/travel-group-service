@@ -32,7 +32,7 @@ public class TravelGroupJoinService {
      * @param authentication 계정정보
      * @return List<TravelGroupMemberDto> 여행그룹 가입 신청자
      */
-    public List<TravelGroupMemberDto> getTravelGroupMembersRequest(Long travelGroupId, GroupJoinStatus status, JwtAuthentication authentication) {
+    public List<TravelGroupMemberDto> getTravelGroupMembersRequest(String travelGroupId, GroupJoinStatus status, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹의 권한이 없습니다."));
 

@@ -59,7 +59,7 @@ public class TravelGroupController {
      * @return TravelGroupDto 여행그룹 수정 결과
      */
     @PatchMapping("/{travelGroupId}")
-    public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull Long travelGroupId,
+    public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull String travelGroupId,
         @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm, @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
     }
@@ -85,7 +85,7 @@ public class TravelGroupController {
      * @return Boolean 여행그룹 삭제 결과
      */
     @DeleteMapping("/{travelGroupId}")
-    public ApiResult<Boolean> deleteTravelGroup(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<Boolean> deleteTravelGroup(@PathVariable String travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.deleteTravelGroup(travelGroupId, authentication));
     }
 

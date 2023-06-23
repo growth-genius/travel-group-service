@@ -76,10 +76,10 @@ public class TravelGroupService {
      * @param authentication        인증정보
      * @return TravelGroupDto travelGroup 수정 결과
      */
-    public TravelGroupDto modifyTravelGroup(Long travelGroupId, TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
+    public TravelGroupDto modifyTravelGroup(String travelGroupId, TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
-        validTravelGroupWithoutOwn(travelGroupModifyForm.getGroupName(), travelGroup.getId());
+        validTravelGroupWithoutOwn(travelGroupModifyForm.getGroupName(), travelGroup.getTravelGroupId());
         travelGroup.modifyTravelGroup(travelGroupModifyForm);
         return TravelGroupDto.from(travelGroup);
     }
@@ -90,7 +90,7 @@ public class TravelGroupService {
      * @param travelGroupName 여행 그룹명
      * @param travelGroupId   고유 그룹 id
      */
-    private void validTravelGroupWithoutOwn(String travelGroupName, Long travelGroupId) {
+    private void validTravelGroupWithoutOwn(String travelGroupName, String travelGroupId) {
         travelGroupRepository.searchByTravelGroupNameWithoutOwn(travelGroupName, travelGroupId).ifPresent(m -> {
             throw new OmittedRequireFieldException("동일한 여행그룹명이 있습니다.");
         });
@@ -103,7 +103,7 @@ public class TravelGroupService {
      * @param authentication 인증정보
      * @return boolean 삭제 여부
      */
-    public Boolean deleteTravelGroup(Long travelGroupId, JwtAuthentication authentication) {
+    public Boolean deleteTravelGroup(String travelGroupId, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
             .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
         travelGroup.deleteTravelGroup();

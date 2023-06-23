@@ -36,7 +36,8 @@ public class TravelGroupMemberController {
      * @return TravelGroupMemberDto 여행 그룹 가입
      */
     @PostMapping("/{travelGroupId}/member")
-    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId,
+        @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, authentication));
     }
 
@@ -49,7 +50,7 @@ public class TravelGroupMemberController {
      * @return Boolean 여행그룹 탈퇴 결과
      */
     @DeleteMapping("/{travelGroupId}/member/{memberId}")
-    public ApiResult<Boolean> deleteTravelGroupMember(@PathVariable Long travelGroupId, @PathVariable Long memberId,
+    public ApiResult<Boolean> deleteTravelGroupMember(@PathVariable String travelGroupId, @PathVariable Long memberId,
         @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupMemberService.deleteTravelGroupMember(travelGroupId, memberId, authentication));
     }

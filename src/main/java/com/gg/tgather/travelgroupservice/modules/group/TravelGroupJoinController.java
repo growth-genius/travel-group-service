@@ -30,7 +30,7 @@ public class TravelGroupJoinController {
      * @return
      */
     @GetMapping("/group-id/{travelGroupId}/status/{status}/members")
-    public ApiResult<List<TravelGroupMemberDto>> getTravelGroupMembersRequest(@PathVariable Long travelGroupId, @PathVariable GroupJoinStatus status,
+    public ApiResult<List<TravelGroupMemberDto>> getTravelGroupMembersRequest(@PathVariable String travelGroupId, @PathVariable GroupJoinStatus status,
         @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupJoinService.getTravelGroupMembersRequest(travelGroupId, status, authentication));
     }

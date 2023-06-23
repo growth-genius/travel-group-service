@@ -25,22 +25,22 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
     }
 
     @Override
-    public Optional<TravelGroup> searchByTravelGroupAndLeader(Long travelGroupId, String accountId) {
+    public Optional<TravelGroup> searchByTravelGroupAndLeader(String travelGroupId, String accountId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup)).fetchJoin().where(
-                travelGroup.id.eq(travelGroupId).and(travelGroupMember.accountId.eq(accountId)).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER)))
-            .fetchOne());
+            travelGroup.travelGroupId.eq(travelGroupId).and(travelGroupMember.accountId.eq(accountId))
+                .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
     }
 
     @Override
-    public Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, Long travelGroupId) {
+    public Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, String travelGroupId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
-            .where(travelGroup.groupName.eq(travelGroupName).and(travelGroup.id.ne(travelGroupId))).fetchOne());
+            .where(travelGroup.groupName.eq(travelGroupName).and(travelGroup.travelGroupId.ne(travelGroupId))).fetchOne());
     }
 
     @Override
-    public Optional<TravelGroup> searchTravelGroupByIdWithLeader(Long groupId) {
+    public Optional<TravelGroup> searchTravelGroupByIdWithLeader(String travelGroupId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
-            .where(travelGroup.id.eq(groupId).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
+            .where(travelGroup.travelGroupId.eq(travelGroupId).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
     }
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
