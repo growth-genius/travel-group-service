@@ -103,7 +103,7 @@ public class TravelGroupMemberService {
         FcmMessageDto fcmMessageDto = new FcmMessageDto();
         fcmMessageDto.setTitle(travelGroup.getGroupName() + "가입 요청");
         fcmMessageDto.setToken(accountDto.getFcmToken());
-        String fcmContent = objectMapper.writeValueAsString(FcmContentDto.createFcmContentDto(travelGroup.getId(), travelGroup.getGroupName()));
+        String fcmContent = objectMapper.writeValueAsString(FcmContentDto.createFcmContentDto(travelGroup.getTravelGroupId(), travelGroup.getGroupName()));
         fcmMessageDto.setMessage(fcmContent);
         travelGroupKafkaProducer.send(kafkaFcmTopicProperties.getSendSingleFcmTopic(), fcmMessageDto);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
