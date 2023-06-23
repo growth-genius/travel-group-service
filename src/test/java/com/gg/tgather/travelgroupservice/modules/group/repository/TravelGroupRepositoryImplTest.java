@@ -41,7 +41,7 @@ class TravelGroupRepositoryImplTest extends AbstractContainerBaseTest implements
             getCommonAuthentication().accountId());
         assertTrue(travelGroup.isPresent());
         // then
-        assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.get().getId());
+        assertEquals(travelGroupDto.getTravelGroupId(), travelGroup.get().getTravelGroupId());
     }
 
     @Test

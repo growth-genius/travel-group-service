@@ -70,7 +70,7 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         // given
         TravelGroup travelGroup = createPublicTravelGroup();
         // when
-        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getId(), getCommonAuthentication());
+        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(), getCommonAuthentication());
         Optional<TravelGroup> validTravelGroup = travelGroupRepository.findById(travelGroup.getId());
         assertTrue(validTravelGroup.isPresent());
         // then
@@ -85,8 +85,8 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
     void whenWithdrawMemberByLeader_thenSuccess() {
         // given
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest("Travel");
-        Long travelGroupId = travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication()).getTravelGroupId();
-        Optional<TravelGroup> optionalTravelGroup = travelGroupRepository.findById(travelGroupId);
+        String travelGroupId = travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication()).getTravelGroupId();
+        Optional<TravelGroup> optionalTravelGroup = travelGroupRepository.findByTravelGroupId(travelGroupId);
         assertTrue(optionalTravelGroup.isPresent());
         TravelGroupMember travelGroupMember = travelGroupAddMember(optionalTravelGroup.get());
         // when
