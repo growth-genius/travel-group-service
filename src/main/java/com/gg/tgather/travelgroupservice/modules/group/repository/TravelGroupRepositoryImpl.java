@@ -26,21 +26,21 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
 
     @Override
     public Optional<TravelGroup> searchByTravelGroupAndLeader(String travelGroupId, String accountId) {
-        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup)).fetchJoin().where(
-            travelGroup.travelGroupId.eq(travelGroupId).and(travelGroupMember.accountId.eq(accountId))
-                .and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
+        return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup)).fetchJoin()
+            .where(travelGroup.travelGroupId.eq(travelGroupId), travelGroupMember.accountId.eq(accountId),
+                travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER)).fetchOne());
     }
 
     @Override
     public Optional<TravelGroup> searchByTravelGroupNameWithoutOwn(String travelGroupName, String travelGroupId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
-            .where(travelGroup.groupName.eq(travelGroupName).and(travelGroup.travelGroupId.ne(travelGroupId))).fetchOne());
+            .where(travelGroup.groupName.eq(travelGroupName), travelGroup.travelGroupId.ne(travelGroupId)).fetchOne());
     }
 
     @Override
     public Optional<TravelGroup> searchTravelGroupByIdWithLeader(String travelGroupId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
-            .where(travelGroup.travelGroupId.eq(travelGroupId).and(travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER))).fetchOne());
+            .where(travelGroup.travelGroupId.eq(travelGroupId), travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER)).fetchOne());
     }
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
