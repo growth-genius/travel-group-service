@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,9 @@ public class TravelGroup extends UpdatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
+    private String travelGroupId;
 
     /* 여행 만남 이름 */
     @Column(unique = true)
@@ -69,7 +73,8 @@ public class TravelGroup extends UpdatedEntity {
     /** 삭제 시점 */
     private LocalDateTime deleteTravelGroupAt;
 
-    public TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
+    private TravelGroup(TravelGroupSaveForm travelGroupSaveForm) {
+        this.travelGroupId = UUID.randomUUID().toString();
         this.groupName = travelGroupSaveForm.getGroupName();
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
         this.startDate = travelGroupSaveForm.getStartDate();

@@ -3,11 +3,11 @@ server:
 spring:
   profiles:
     activate:
-      on-profile: default
+      on-profile: test
   application:
     name: travel-group-service
   flyway:
-    baseline-on-migrate: true
+    enabled: false
 eureka:
   instance:
     instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
@@ -15,12 +15,11 @@ eureka:
     register-with-eureka: true # eureka
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost/eureka
+      defaultZone: http://localhost:8761/eureka
 
 logging:
   level:
-    com.gg.accountservice: DEBUG
-
+    com.gg.tgather.accountservice: DEBUG
 
 kafka:
-  bootstrap-servers-config: 172.0.0.1:9092
+  bootstrap-servers-config: localhost:9092

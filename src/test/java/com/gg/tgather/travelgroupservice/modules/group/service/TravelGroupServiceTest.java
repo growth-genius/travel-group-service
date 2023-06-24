@@ -1,31 +1,29 @@
-package com.gg.tgather.travelgroupservice.modules.service;
+package com.gg.tgather.travelgroupservice.modules.group.service;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
-import com.gg.tgather.commonservice.security.JwtAuthentication;
-import com.gg.tgather.commonservice.security.JwtAuthenticationToken;
 import com.gg.tgather.travelgroupservice.infra.annotation.ServiceTest;
 import com.gg.tgather.travelgroupservice.infra.container.AbstractContainerBaseTest;
 import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthentication;
+import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
-import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 @ServiceTest
 @WithMockJwtAuthentication
-class TravelGroupServiceTest extends AbstractContainerBaseTest {
+class TravelGroupServiceTest extends AbstractContainerBaseTest implements AbstractJwtAuthentication {
 
     @Autowired
     private TravelGroupService travelGroupService;
@@ -33,15 +31,9 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     @Autowired
     private TravelGroupRepository travelGroupRepository;
 
-    private JwtAuthentication getAuthentication() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken authenticationToken = (JwtAuthenticationToken) authentication;
-        return (JwtAuthentication) authenticationToken.getPrincipal();
-    }
-
-    private void createTravelGroupWithTest(String travelGroupName) {
+    private TravelGroupDto createTravelGroupWithTest(String travelGroupName) {
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
-        travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
+        return travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication());
     }
 
     @Test
@@ -49,7 +41,7 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     void createTravelGroup() {
         String travelGroupName = "전국 여행일지";
         TravelGroupSaveForm travelGroupSaveForm = TravelGroupSaveForm.createTravelGroupSaveFormForTest(travelGroupName);
-        TravelGroupDto travelGroupDto = travelGroupService.createTravelGroup(travelGroupSaveForm, getAuthentication());
+        TravelGroupDto travelGroupDto = travelGroupService.createTravelGroup(travelGroupSaveForm, getCommonAuthentication());
         assertEquals(travelGroupName, travelGroupDto.getGroupName());
     }
 
@@ -57,25 +49,39 @@ class TravelGroupServiceTest extends AbstractContainerBaseTest {
     @DisplayName("travel group 수정 확인")
     void modifyTravelGroup() {
         String groupName = "전국 맛집탐방";
-        createTravelGroupWithTest(groupName);
+        TravelGroupDto createTravelGroup = createTravelGroupWithTest(groupName);
         TravelGroupModifyForm travelGroupModifyForm = new TravelGroupModifyForm();
         travelGroupModifyForm.setGroupName(groupName);
         travelGroupModifyForm.setTravelThemes(Set.of(TravelTheme.FOOD));
         travelGroupModifyForm.setStartDate("2023-10-01T09:45:00.000+02:00");
-        // TODO 내가 수정한 TravelGroup외에 다른 곳에 TravelGroupName이 같은지 찾기
-        TravelGroupDto travelGroupDto = travelGroupService.modifyTravelGroup(travelGroupModifyForm, getAuthentication());
+        TravelGroupDto travelGroupDto = travelGroupService.modifyTravelGroup(createTravelGroup.getTravelGroupId(), travelGroupModifyForm,
+            getCommonAuthentication());
         assertTrue(travelGroupDto.getTravelThemes().contains(TravelTheme.FOOD));
     }
 
     @Test
     @DisplayName("travel group 삭제 확인")
     void deleteTravelGroup() {
-        String groupName = "전국 여행일지";
-        createTravelGroupWithTest(groupName);
-        Boolean deleted = travelGroupService.deleteTravelGroup(groupName, getAuthentication());
-        TravelGroup travelGroup = travelGroupRepository.findByGroupName(groupName).orElseThrow();
-        assertTrue(travelGroup.isDeleteTravelGroup());
+        TravelGroupDto travelGroupDto = createTravelGroupWithTest("TravelGroup");
+        Boolean deleted = travelGroupService.deleteTravelGroup(travelGroupDto.getTravelGroupId(), getCommonAuthentication());
+        Optional<TravelGroup> travelGroup = travelGroupRepository.findByGroupName("TravelGroup");
+        assertTrue(travelGroup.isPresent());
+        assertTrue(travelGroup.get().isDeleteTravelGroup());
         assertTrue(deleted);
+    }
+
+
+    @Test
+    @DisplayName("travel group 조회 확인")
+    void searchTravelGroup() {
+        // given
+        TravelGroupDto travelGroupDto = createTravelGroupWithTest("TravelGroup");
+        // when
+        List<TravelGroupDto> travelGroupByTheme = travelGroupService.findTravelGroupByTheme(travelGroupDto.getTravelThemes());
+        // then
+        assertEquals(1, travelGroupByTheme.size());
+        assertEquals("TravelGroup", travelGroupByTheme.get(0).getGroupName());
+        assertEquals(Set.of(TravelTheme.ACTIVITY), travelGroupByTheme.get(0).getTravelThemes());
     }
 
 }
