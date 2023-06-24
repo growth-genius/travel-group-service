@@ -11,7 +11,6 @@ import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyFor
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -59,8 +58,8 @@ public class TravelGroupController {
      * @return TravelGroupDto 여행그룹 수정 결과
      */
     @PatchMapping("/{travelGroupId}")
-    public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable @NotNull Long travelGroupId,
-        @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm, @AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable String travelGroupId, @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm,
+        @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
     }
 
@@ -85,7 +84,7 @@ public class TravelGroupController {
      * @return Boolean 여행그룹 삭제 결과
      */
     @DeleteMapping("/{travelGroupId}")
-    public ApiResult<Boolean> deleteTravelGroup(@PathVariable Long travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<Boolean> deleteTravelGroup(@PathVariable String travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.deleteTravelGroup(travelGroupId, authentication));
     }
 

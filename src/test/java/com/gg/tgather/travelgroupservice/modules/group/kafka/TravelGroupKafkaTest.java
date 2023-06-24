@@ -53,7 +53,7 @@ class TravelGroupKafkaTest implements AbstractJwtAuthentication {
         TravelGroup travelGroup = createPrivateTravelGroup();
         when(accountServiceClient.getAccount(getCommonAuthentication().accountId())).thenReturn(defaultAccount());
         // when
-        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getId(), getCommonAuthentication());
+        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(), getCommonAuthentication());
         // then
         assertFalse(travelGroupMemberDto.isApproved());
     }

@@ -42,12 +42,12 @@ public class TravelGroupMemberService {
     /**
      * 여행그룹 가입 요청 처리
      *
-     * @param groupId        여행그룹Id
+     * @param travelGroupId  여행그룹Id
      * @param authentication 계정정보
      * @return boolean 여행그룹 가입 요청 결과
      */
-    public TravelGroupMemberDto requestTravelGroupJoin(Long groupId, JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(groupId)
+    public TravelGroupMemberDto requestTravelGroupJoin(String travelGroupId, JwtAuthentication authentication) {
+        TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(travelGroupId)
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
         TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, authentication.accountId(),
             validTravelGroup(travelGroup, authentication));
@@ -103,7 +103,7 @@ public class TravelGroupMemberService {
         FcmMessageDto fcmMessageDto = new FcmMessageDto();
         fcmMessageDto.setTitle(travelGroup.getGroupName() + "가입 요청");
         fcmMessageDto.setToken(accountDto.getFcmToken());
-        String fcmContent = objectMapper.writeValueAsString(FcmContentDto.createFcmContentDto(travelGroup.getId(), travelGroup.getGroupName()));
+        String fcmContent = objectMapper.writeValueAsString(FcmContentDto.createFcmContentDto(travelGroup.getTravelGroupId(), travelGroup.getGroupName()));
         fcmMessageDto.setMessage(fcmContent);
         travelGroupKafkaProducer.send(kafkaFcmTopicProperties.getSendSingleFcmTopic(), fcmMessageDto);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
@@ -118,8 +118,9 @@ public class TravelGroupMemberService {
      * @param authentication 계정정보
      * @return Boolean 여행그룹 탈퇴 여부
      */
-    public Boolean deleteTravelGroupMember(Long travelGroupId, Long memberId, JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository.findById(travelGroupId).orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
+    public Boolean deleteTravelGroupMember(String travelGroupId, Long memberId, JwtAuthentication authentication) {
+        TravelGroup travelGroup = travelGroupRepository.findByTravelGroupId(travelGroupId)
+            .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
         TravelGroupMember travelGroupMember = travelGroup.getTravelGroupMemberList().stream().filter(member -> member.getId().equals(memberId)).findFirst()
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 사용자를 찾을 수 없습니다."));
         boolean validLeader = validTravelGroupLeader(travelGroup, authentication);

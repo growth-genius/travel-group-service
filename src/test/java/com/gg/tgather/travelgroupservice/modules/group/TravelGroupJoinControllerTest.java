@@ -57,10 +57,10 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
     void privateTravelGroupRequestMembers() throws Exception {
         // given
         TravelGroup travelGroup = savePrivateTravelGroupTest();
-        mockMvc.perform(
-                get("/travel-group/group-id/{travelGroupId}/status/{status}/members", travelGroup.getId(), NO_APPROVED).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].accountId").value("Member"))
-            .andExpect(jsonPath("$.response[0].approved").isBoolean()).andExpect(jsonPath("$.response[0].approved").value(false));
+        mockMvc.perform(get("/travel-group/group-id/{travelGroupId}/status/{status}/members", travelGroup.getTravelGroupId(), NO_APPROVED).contentType(
+                MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray())
+            .andExpect(jsonPath("$.response[0].accountId").value("Member")).andExpect(jsonPath("$.response[0].approved").isBoolean())
+            .andExpect(jsonPath("$.response[0].approved").value(false));
     }
 
 

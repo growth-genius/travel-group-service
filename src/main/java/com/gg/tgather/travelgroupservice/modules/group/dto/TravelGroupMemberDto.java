@@ -11,14 +11,14 @@ import lombok.Setter;
 public class TravelGroupMemberDto {
 
     /** 여행그룹 가입자 아이디 */
-    private Long travelGroupMemberId;
+    private String travelGroupMemberId;
     /** 계정정보 */
     private String accountId;
     /** 여행그룹 승인 여부 */
     private boolean approved;
 
     public TravelGroupMemberDto(TravelGroupMember travelGroupMember) {
-        this.travelGroupMemberId = travelGroupMember.getId();
+        this.travelGroupMemberId = travelGroupMember.getTravelGroupMemberId();
         this.accountId = travelGroupMember.getAccountId();
         this.approved = travelGroupMember.isApproved();
     }

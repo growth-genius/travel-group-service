@@ -46,7 +46,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest implements Ab
         travelGroupAddLeader(travelGroup);
         travelGroupAddMember(travelGroup, false);
         // when
-        List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getId(), NO_APPROVED,
+        List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getTravelGroupId(), NO_APPROVED,
             getCommonAuthentication());
         // then
         assertEquals(1, travelGroupMembersRequest.size());
@@ -61,7 +61,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest implements Ab
         travelGroupAddLeader(travelGroup);
         travelGroupAddMember(travelGroup, true);
         // when
-        List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getId(), APPROVED,
+        List<TravelGroupMemberDto> travelGroupMembersRequest = travelGroupJoinService.getTravelGroupMembersRequest(travelGroup.getTravelGroupId(), APPROVED,
             getCommonAuthentication());
         // then
         assertEquals(2, travelGroupMembersRequest.size());

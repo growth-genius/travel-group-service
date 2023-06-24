@@ -20,4 +20,5 @@ public interface TravelGroupRepository extends JpaRepository<TravelGroup, Long>,
      */
     Optional<TravelGroup> findByGroupName(String groupName);
 
+    Optional<TravelGroup> findByTravelGroupId(String travelGroupId);
 }

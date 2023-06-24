@@ -29,7 +29,7 @@ public class FcmContentDto {
      * @param groupName     여행그룹명
      * @return FcmContentDto Fcm 메세지 값
      */
-    public static FcmContentDto createFcmContentDto(Long travelGroupId, String groupName) {
+    public static FcmContentDto createFcmContentDto(String travelGroupId, String groupName) {
         return new FcmContentDto(LINK, "/link/travel-group/" + travelGroupId, groupName + " 에서 가입 요청이 왔습니다.");
     }
 }
