@@ -124,12 +124,12 @@ public class TravelGroupService {
      */
     public List<TravelGroupDto> findAllTravelGroupByMe(String accountId) {
         TravelGroupSearch travelGroupSearch = getTravelGroupSearch(accountId);
-        List<TravelGroupDto> travelGroupDtoList = new ArrayList<>();
-        makeTravelGroupDto(travelGroupSearch, travelGroupDtoList);
-        return travelGroupDtoList;
+
+        return makeTravelGroupDto(travelGroupSearch);
     }
 
-    private static void makeTravelGroupDto(TravelGroupSearch travelGroupSearch, List<TravelGroupDto> travelGroupDtoList) {
+    private static List<TravelGroupDto> makeTravelGroupDto(TravelGroupSearch travelGroupSearch) {
+        List<TravelGroupDto> travelGroupDtoList = new ArrayList<>();
         for (String travelGroupId : travelGroupSearch.travelGroupIds()) {
             TravelGroupDto travelGroupDto = TravelGroupDto.of(travelGroupId);
             Map<TravelTheme, List<TravelGroupSearchVo>> themeListMap = travelGroupSearch.travelGroupSearchVoList().stream()
@@ -144,6 +144,7 @@ public class TravelGroupService {
             }
             travelGroupDtoList.add(travelGroupDto);
         }
+        return travelGroupDtoList;
     }
 
     @NotNull
