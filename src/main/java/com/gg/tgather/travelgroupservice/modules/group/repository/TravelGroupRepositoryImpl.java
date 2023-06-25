@@ -2,9 +2,11 @@ package com.gg.tgather.travelgroupservice.modules.group.repository;
 
 import static com.gg.tgather.travelgroupservice.modules.group.entity.QTravelGroup.travelGroup;
 import static com.gg.tgather.travelgroupservice.modules.group.entity.QTravelGroupMember.travelGroupMember;
+import static com.querydsl.core.types.Projections.constructor;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.jpa.Querydsl5Support;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupSearchDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupRole;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -41,6 +43,12 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
     public Optional<TravelGroup> searchTravelGroupByIdWithLeader(String travelGroupId) {
         return Optional.ofNullable(selectFrom(travelGroup).innerJoin(travelGroup.travelGroupMemberList, travelGroupMember).fetchJoin()
             .where(travelGroup.travelGroupId.eq(travelGroupId), travelGroupMember.travelGroupRole.eq(TravelGroupRole.LEADER)).fetchOne());
+    }
+
+    @Override
+    public List<TravelGroupSearchDto> searchTravelGroupAllByMe(String accountId) {
+        return select(constructor(TravelGroupSearchDto.class, travelGroup)).leftJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup))
+            .where(travelGroupMember.accountId.eq(accountId)).from(travelGroup).fetch();
     }
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
