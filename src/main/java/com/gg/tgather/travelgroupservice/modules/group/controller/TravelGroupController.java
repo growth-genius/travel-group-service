@@ -80,7 +80,7 @@ public class TravelGroupController {
      * @param authentication 로그인 사용자 정보
      * @return List<TravelGroupDto> 조회된 여행 그룹 목록
      */
-    @GetMapping
+    @GetMapping("/own")
     public ApiResult<List<TravelGroupDto>> findTravelGroupByOwn(@AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.findAllTravelGroupByOwn(authentication.accountId()));
     }
