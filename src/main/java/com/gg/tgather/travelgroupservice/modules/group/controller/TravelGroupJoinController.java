@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.group;
+package com.gg.tgather.travelgroupservice.modules.group.controller;
 
 import static com.gg.tgather.commonservice.utils.ApiUtil.success;
 

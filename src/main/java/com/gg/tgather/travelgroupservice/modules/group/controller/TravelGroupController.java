@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.group;
+package com.gg.tgather.travelgroupservice.modules.group.controller;
 
 import static com.gg.tgather.commonservice.utils.ApiUtil.success;
 
@@ -66,15 +66,25 @@ public class TravelGroupController {
     /**
      * 여행테마로 그룹 찾기 API
      *
-     * @param travelThemes   여행 테마
-     * @param authentication 계정 인증
+     * @param travelThemes 여행 테마
      * @return List<TravelGroupDto> 조건에 부합한 여행그룹들
      */
     @GetMapping
-    public ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam Set<TravelTheme> travelThemes,
-        @AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<List<TravelGroupDto>> findTravelGroupByTravelThemes(@RequestParam Set<TravelTheme> travelThemes) {
         return success(travelGroupService.findTravelGroupByTheme(travelThemes));
     }
+
+    /**
+     * 로그인 사용자의 여행그룹 조회
+     *
+     * @param authentication 로그인 사용자 정보
+     * @return List<TravelGroupDto> 조회된 여행 그룹 목록
+     */
+    @GetMapping
+    public ApiResult<List<TravelGroupDto>> findTravelGroupByOwn(@AuthenticationPrincipal JwtAuthentication authentication) {
+        return success(travelGroupService.findAllTravelGroupByOwn(authentication.accountId()));
+    }
+
 
     /**
      * 여행그룹 삭제 API

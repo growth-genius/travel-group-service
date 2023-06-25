@@ -11,10 +11,16 @@ import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyFor
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 여행그룹 CRUD 서비스
@@ -109,4 +115,50 @@ public class TravelGroupService {
         travelGroup.deleteTravelGroup();
         return true;
     }
+
+    /**
+     * 사용자 별 여행그룹 조회
+     *
+     * @param accountId 사용자 아이디
+     * @return List<TravelGroupDto>
+     */
+    public List<TravelGroupDto> findAllTravelGroupByOwn(String accountId) {
+        TravelGroupSearch travelGroupSearch = getTravelGroupSearch(accountId);
+
+        return makeTravelGroupDto(travelGroupSearch);
+    }
+
+    private static List<TravelGroupDto> makeTravelGroupDto(TravelGroupSearch travelGroupSearch) {
+        List<TravelGroupDto> travelGroupDtoList = new ArrayList<>();
+        for (String travelGroupId : travelGroupSearch.travelGroupIds()) {
+            TravelGroupDto travelGroupDto = TravelGroupDto.of(travelGroupId);
+            Map<TravelTheme, List<TravelGroupSearchVo>> themeListMap = travelGroupSearch.travelGroupSearchVoList().stream()
+                .filter(t -> t.getTravelGroupId().equals(travelGroupId)).collect(Collectors.groupingBy(TravelGroupSearchVo::getTravelTheme));
+            for (Entry<TravelTheme, List<TravelGroupSearchVo>> travelThemeListEntry : themeListMap.entrySet()) {
+                travelGroupDto.addTravelTheme(travelThemeListEntry.getKey());
+                for (List<TravelGroupSearchVo> members : themeListMap.values()) {
+                    for (TravelGroupSearchVo member : members) {
+                        travelGroupDto.addMember(member);
+                    }
+                }
+            }
+            travelGroupDtoList.add(travelGroupDto);
+        }
+        return travelGroupDtoList;
+    }
+
+    @NotNull
+    private TravelGroupSearch getTravelGroupSearch(String accountId) {
+        List<TravelGroupSearchVo> travelGroupSearchVoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
+        List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct().map(TravelGroupSearchVo::getTravelGroupId).toList();
+        return TravelGroupSearch.of(travelGroupSearchVoList, travelGroupIds);
+    }
+
+    private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
+
+        public static TravelGroupSearch of(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
+            return new TravelGroupSearch(travelGroupSearchVoList, travelGroupIds);
+        }
+    }
+
 }
