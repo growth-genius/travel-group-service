@@ -150,9 +150,14 @@ public class TravelGroupService {
     private TravelGroupSearch getTravelGroupSearch(String accountId) {
         List<TravelGroupSearchVo> travelGroupSearchVoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
         List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct().map(TravelGroupSearchVo::getTravelGroupId).toList();
-        return new TravelGroupSearch(travelGroupSearchVoList, travelGroupIds);
+        return TravelGroupSearch.of(travelGroupSearchVoList, travelGroupIds);
     }
 
-    private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {}
+    private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
+
+        public static TravelGroupSearch of(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
+            return new TravelGroupSearch(travelGroupSearchVoList, travelGroupIds);
+        }
+    }
 
 }
