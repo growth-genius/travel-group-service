@@ -81,7 +81,7 @@ public class TravelGroupController {
      * @return List<TravelGroupDto> 조회된 여행 그룹 목록
      */
     @GetMapping
-    public ApiResult<List<TravelGroupDto>> findTravelGroupByMe(@AuthenticationPrincipal JwtAuthentication authentication) {
+    public ApiResult<List<TravelGroupDto>> findTravelGroupByOwn(@AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.findAllTravelGroupByMe(authentication.accountId()));
     }
 
