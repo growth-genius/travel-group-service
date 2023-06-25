@@ -16,12 +16,16 @@ public class TravelGroupSearchVo {
     /** 여행테마 */
     private TravelTheme travelTheme;
 
+    /** 여행 그룹 멤버 아이디 */
     private String travelGroupMemberId;
 
+    /** 사용자 아이디 */
     private String accountId;
 
+    /** 사용자 권한 */
     private TravelGroupRole travelGroupRole;
 
+    /** 승인 여부 */
     private boolean approved;
 
 }
