@@ -5,13 +5,13 @@ import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
-import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupSearchDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -132,12 +132,12 @@ public class TravelGroupService {
     private static void makeTravelGroupDto(TravelGroupSearch travelGroupSearch, List<TravelGroupDto> travelGroupDtoList) {
         for (String travelGroupId : travelGroupSearch.travelGroupIds()) {
             TravelGroupDto travelGroupDto = TravelGroupDto.of(travelGroupId);
-            Map<TravelTheme, List<TravelGroupSearchDto>> themeListMap = travelGroupSearch.travelGroupSearchDtoList().stream()
-                .filter(t -> t.getTravelGroupId().equals(travelGroupId)).collect(Collectors.groupingBy(TravelGroupSearchDto::getTravelTheme));
-            for (Entry<TravelTheme, List<TravelGroupSearchDto>> travelThemeListEntry : themeListMap.entrySet()) {
+            Map<TravelTheme, List<TravelGroupSearchVo>> themeListMap = travelGroupSearch.travelGroupSearchVoList().stream()
+                .filter(t -> t.getTravelGroupId().equals(travelGroupId)).collect(Collectors.groupingBy(TravelGroupSearchVo::getTravelTheme));
+            for (Entry<TravelTheme, List<TravelGroupSearchVo>> travelThemeListEntry : themeListMap.entrySet()) {
                 travelGroupDto.addTravelTheme(travelThemeListEntry.getKey());
-                for (List<TravelGroupSearchDto> members : themeListMap.values()) {
-                    for (TravelGroupSearchDto member : members) {
+                for (List<TravelGroupSearchVo> members : themeListMap.values()) {
+                    for (TravelGroupSearchVo member : members) {
                         travelGroupDto.addMember(member);
                     }
                 }
@@ -148,11 +148,11 @@ public class TravelGroupService {
 
     @NotNull
     private TravelGroupSearch getTravelGroupSearch(String accountId) {
-        List<TravelGroupSearchDto> travelGroupSearchDtoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
-        List<String> travelGroupIds = travelGroupSearchDtoList.stream().distinct().map(TravelGroupSearchDto::getTravelGroupId).toList();
-        return new TravelGroupSearch(travelGroupSearchDtoList, travelGroupIds);
+        List<TravelGroupSearchVo> travelGroupSearchVoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
+        List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct().map(TravelGroupSearchVo::getTravelGroupId).toList();
+        return new TravelGroupSearch(travelGroupSearchVoList, travelGroupIds);
     }
 
-    private record TravelGroupSearch(List<TravelGroupSearchDto> travelGroupSearchDtoList, List<String> travelGroupIds) {}
-    
+    private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {}
+
 }

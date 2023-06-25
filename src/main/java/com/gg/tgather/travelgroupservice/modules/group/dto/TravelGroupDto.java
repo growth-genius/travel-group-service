@@ -2,6 +2,7 @@ package com.gg.tgather.travelgroupservice.modules.group.dto;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -50,7 +51,7 @@ public class TravelGroupDto {
         this.travelThemes.add(travelTheme);
     }
 
-    public void addMember(TravelGroupSearchDto member) {
+    public void addMember(TravelGroupSearchVo member) {
         this.travelGroupMemberList.add(TravelGroupMemberDto.from(member));
         this.totalMember++;
     }

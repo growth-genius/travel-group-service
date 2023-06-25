@@ -2,6 +2,7 @@ package com.gg.tgather.travelgroupservice.modules.group.dto;
 
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupRole;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class TravelGroupMemberDto {
         return new TravelGroupMemberDto(travelGroupMember);
     }
 
-    public static TravelGroupMemberDto from(TravelGroupSearchDto member) {
+    public static TravelGroupMemberDto from(TravelGroupSearchVo member) {
         TravelGroupMemberDto memberDto = new TravelGroupMemberDto();
         memberDto.travelGroupMemberId = member.getTravelGroupMemberId();
         memberDto.travelGroupRole = member.getTravelGroupRole();

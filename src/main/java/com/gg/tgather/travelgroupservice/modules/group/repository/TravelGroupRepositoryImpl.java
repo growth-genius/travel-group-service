@@ -6,9 +6,9 @@ import static com.querydsl.core.types.Projections.constructor;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.jpa.Querydsl5Support;
-import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupSearchDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupRole;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +46,8 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
     }
 
     @Override
-    public List<TravelGroupSearchDto> searchTravelGroupAllByMe(String accountId) {
-        return select(constructor(TravelGroupSearchDto.class, travelGroup)).leftJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup))
+    public List<TravelGroupSearchVo> searchTravelGroupAllByMe(String accountId) {
+        return select(constructor(TravelGroupSearchVo.class, travelGroup)).leftJoin(travelGroupMember).on(travelGroupMember.travelGroup.eq(travelGroup))
             .where(travelGroupMember.accountId.eq(accountId)).from(travelGroup).fetch();
     }
 

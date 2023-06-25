@@ -1,8 +1,8 @@
 package com.gg.tgather.travelgroupservice.modules.group.repository;
 
 import com.gg.tgather.commonservice.enums.TravelTheme;
-import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupSearchDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
+import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -43,6 +43,6 @@ public interface TravelGroupRepositoryQuerydsl {
      */
     Optional<TravelGroup> searchTravelGroupByIdWithLeader(String travelGroupId);
 
-    List<TravelGroupSearchDto> searchTravelGroupAllByMe(String accountId);
+    List<TravelGroupSearchVo> searchTravelGroupAllByMe(String accountId);
 
 }
