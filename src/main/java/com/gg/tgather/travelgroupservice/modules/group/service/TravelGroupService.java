@@ -122,7 +122,7 @@ public class TravelGroupService {
      * @param accountId 사용자 아이디
      * @return List<TravelGroupDto>
      */
-    public List<TravelGroupDto> findAllTravelGroupByMe(String accountId) {
+    public List<TravelGroupDto> findAllTravelGroupByOwn(String accountId) {
         TravelGroupSearch travelGroupSearch = getTravelGroupSearch(accountId);
 
         return makeTravelGroupDto(travelGroupSearch);

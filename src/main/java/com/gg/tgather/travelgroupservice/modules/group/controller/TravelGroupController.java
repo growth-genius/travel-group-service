@@ -82,7 +82,7 @@ public class TravelGroupController {
      */
     @GetMapping
     public ApiResult<List<TravelGroupDto>> findTravelGroupByOwn(@AuthenticationPrincipal JwtAuthentication authentication) {
-        return success(travelGroupService.findAllTravelGroupByMe(authentication.accountId()));
+        return success(travelGroupService.findAllTravelGroupByOwn(authentication.accountId()));
     }
 
 
