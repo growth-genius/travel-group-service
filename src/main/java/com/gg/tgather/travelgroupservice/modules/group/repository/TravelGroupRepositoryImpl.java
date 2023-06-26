@@ -53,6 +53,7 @@ public class TravelGroupRepositoryImpl extends Querydsl5Support implements Trave
 
     BooleanExpression containsTravelGroup(Set<TravelTheme> themes) {
         BooleanExpression contains = null;
+        if (themes == null) return null;
         for (TravelTheme theme : themes) {
             if (contains == null) {
                 contains = travelGroup.travelThemes.contains(theme).and(travelGroup.deleteTravelGroup.isFalse());

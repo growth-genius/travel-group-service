@@ -2,9 +2,11 @@ package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
+import com.gg.tgather.commonservice.enums.EnumMapperValue;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
@@ -13,6 +15,7 @@ import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMem
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
 import com.gg.tgather.travelgroupservice.modules.group.vo.TravelGroupSearchVo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -152,6 +155,11 @@ public class TravelGroupService {
         List<TravelGroupSearchVo> travelGroupSearchVoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
         List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct().map(TravelGroupSearchVo::getTravelGroupId).toList();
         return TravelGroupSearch.of(travelGroupSearchVoList, travelGroupIds);
+    }
+
+    public TravelGroupRegisterInitDto findRegisterInitData() {
+        return TravelGroupRegisterInitDto.builder().travelGroupList(this.findTravelGroupByTheme(null))
+            .travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {

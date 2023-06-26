@@ -7,6 +7,7 @@ import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
@@ -36,6 +37,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TravelGroupController {
 
     private final TravelGroupService travelGroupService;
+
+    /**
+     * 여행 그룹 생성 전 초기 조회
+     *
+     * @return TravelGroupRegisterInitDto
+     */
+    @GetMapping("/register/init")
+    public ApiResult<TravelGroupRegisterInitDto> getRegisterInit() {
+        return success(travelGroupService.findRegisterInitData(), "조회되었습니다.");
+    }
 
     /**
      * 여행 그룹 생성 API
