@@ -158,8 +158,7 @@ public class TravelGroupService {
     }
 
     public TravelGroupRegisterInitDto findRegisterInitData() {
-        return TravelGroupRegisterInitDto.builder().travelGroupList(this.findTravelGroupByTheme(null))
-            .travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
+        return TravelGroupRegisterInitDto.builder().travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {

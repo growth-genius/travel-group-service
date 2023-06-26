@@ -10,6 +10,5 @@ import lombok.Data;
 public class TravelGroupRegisterInitDto {
 
     List<EnumMapperValue> travelThemes;
-    List<TravelGroupDto> travelGroupList;
 
 }
