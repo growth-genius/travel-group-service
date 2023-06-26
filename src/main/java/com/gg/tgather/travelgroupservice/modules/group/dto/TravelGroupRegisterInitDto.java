@@ -1,0 +1,15 @@
+package com.gg.tgather.travelgroupservice.modules.group.dto;
+
+import com.gg.tgather.commonservice.enums.EnumMapperValue;
+import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class TravelGroupRegisterInitDto {
+
+    List<EnumMapperValue> travelThemes;
+    List<TravelGroupDto> travelGroupList;
+
+}
