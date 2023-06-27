@@ -68,11 +68,15 @@ public class TravelGroupMemberService {
             log.error("travelGroup is already deleted : {}", travelGroup.getGroupName());
             throw new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다.");
         }
+        
+        AccountDto accountDto = accountServiceClient.getAccount(authentication.accountId());
+        if (travelGroup.getLimitAgeRangeStart() != 0 && travelGroup.getLimitAgeRangeStart() < accountDto.getAge()
+            || travelGroup.getLimitAgeRangeEnd() < accountDto.getAge()) {
+            throw new OmittedRequireFieldException("현재 요청하신 여행그룹에 나이제한으로 인해 참여하실 수 없습니다.");
+        }
 
         if (!travelGroup.isOpen()) {
-
             try {
-                AccountDto accountDto = accountServiceClient.getAccount(authentication.accountId());
                 return sendFcmMessage(travelGroup, accountDto);
             } catch (JsonProcessingException ex) {
                 log.error("Failed to JsonProcessing");

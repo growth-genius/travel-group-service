@@ -20,12 +20,27 @@ public class TravelGroupSaveForm {
     @NotEmpty(message = "여행 테마를 하나 이상 선택 해 주세요.")
     private Set<TravelTheme> travelThemes;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    private String imageUrl;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @NotNull(message = "모임 시작일자를 선택해 주세요.")
     private String startDate;
 
     /** 여행그룹 공개 여부 확인 */
     private boolean open = true;
+
+    /** 나이 제한 여부 확인 */
+    private boolean limitedAge = false;
+
+    /** 나이 제한 범위 시작 */
+    private int limitAgeRangeStart = 0;
+
+    /** 나이 제한 범위 마지노선 */
+    private int limitAgeRangeEnd = 0;
 
     /** 참여자 수 제한 여부 확인 */
     private boolean limitedParticipant = true;
