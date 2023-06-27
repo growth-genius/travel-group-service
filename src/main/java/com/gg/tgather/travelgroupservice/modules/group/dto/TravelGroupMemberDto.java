@@ -20,11 +20,16 @@ public class TravelGroupMemberDto {
     private boolean approved;
     /** 권한 */
     private TravelGroupRole travelGroupRole;
+    /** 닉네임 */
+    private String nickname;
+    /** 프로필 이미지 */
+    private String profileImage;
 
     public TravelGroupMemberDto(TravelGroupMember travelGroupMember) {
         this.travelGroupMemberId = travelGroupMember.getTravelGroupMemberId();
         this.accountId = travelGroupMember.getAccountId();
         this.approved = travelGroupMember.isApproved();
+        this.travelGroupRole = travelGroupMember.getTravelGroupRole();
     }
 
     public static TravelGroupMemberDto from(TravelGroupMember travelGroupMember) {

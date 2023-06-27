@@ -7,6 +7,7 @@ import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,9 +35,9 @@ public class TravelGroupMemberController {
      * @return TravelGroupMemberDto 여행 그룹 가입
      */
     @PostMapping("/{travelGroupId}/member")
-    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId,
+    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId, TravelGroupJoinForm travelGroupJoinForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, authentication));
+        return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, travelGroupJoinForm, authentication));
     }
 
     /**

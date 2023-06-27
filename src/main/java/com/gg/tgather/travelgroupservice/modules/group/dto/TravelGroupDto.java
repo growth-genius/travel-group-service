@@ -43,16 +43,17 @@ public class TravelGroupDto {
     private int limitAgeRangeEnd = 0;
 
     public static TravelGroupDto from(TravelGroup travelGroup) {
-        TravelGroupDto travelGroupDTO = new TravelGroupDto();
-        travelGroupDTO.travelGroupId = travelGroup.getTravelGroupId();
-        travelGroupDTO.groupName = travelGroup.getGroupName();
-        travelGroupDTO.travelThemes = new HashSet<>(travelGroup.getTravelThemes());
-        travelGroupDTO.totalMember = travelGroup.getTravelGroupMemberList().size();
-        travelGroupDTO.description = travelGroup.getDescription();
-        travelGroupDTO.imageUrl = travelGroup.getImageUrl();
-        travelGroupDTO.limitAgeRangeStart = travelGroup.getLimitAgeRangeStart();
-        travelGroupDTO.limitAgeRangeEnd = travelGroup.getLimitAgeRangeEnd();
-        return travelGroupDTO;
+        TravelGroupDto travelGroupDto = new TravelGroupDto();
+        travelGroupDto.travelGroupId = travelGroup.getTravelGroupId();
+        travelGroupDto.groupName = travelGroup.getGroupName();
+        travelGroupDto.travelThemes = new HashSet<>(travelGroup.getTravelThemes());
+        travelGroupDto.totalMember = travelGroup.getTravelGroupMemberList().size();
+        travelGroupDto.travelGroupMemberList = travelGroup.getTravelGroupMemberList().stream().map(TravelGroupMemberDto::from).toList();
+        travelGroupDto.description = travelGroup.getDescription();
+        travelGroupDto.imageUrl = travelGroup.getImageUrl();
+        travelGroupDto.limitAgeRangeStart = travelGroup.getLimitAgeRangeStart();
+        travelGroupDto.limitAgeRangeEnd = travelGroup.getLimitAgeRangeEnd();
+        return travelGroupDto;
     }
 
     public static TravelGroupDto of(String travelGroupId) {
