@@ -82,7 +82,7 @@ public class TravelGroupController {
      *
      * @return 여행그룹 전체 결과값
      */
-    @GetMapping
+    @GetMapping("/all")
     public ApiResult<TravelGroupWithPageable> findAllTravelGroups(@PageableDefault(sort = "id") Pageable pageable) {
         return success(travelGroupService.findAllTravelGroupsWithPageable(pageable));
     }
