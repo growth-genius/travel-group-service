@@ -11,4 +11,8 @@ public class TravelGroupJoinForm {
     private String nickname;
     /** 프로필 이미지 */
     private String profileImage;
+
+    TravelGroupJoinForm(String nickname) {
+        this.nickname = nickname;
+    }
 }
