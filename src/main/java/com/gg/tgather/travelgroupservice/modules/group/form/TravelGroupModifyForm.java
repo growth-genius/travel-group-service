@@ -20,6 +20,12 @@ public class TravelGroupModifyForm {
     @NotNull(message = "모임 시작일자를 선택해 주세요.")
     private String startDate;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    private String imageUrl;
+
     /** 여행그룹 공개 여부 확인 */
     private boolean open = true;
 

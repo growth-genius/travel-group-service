@@ -51,6 +51,12 @@ public class TravelGroup extends UpdatedEntity {
     @CollectionTable(name = "travel_themes", joinColumns = @JoinColumn(name = "travel_group_id"))
     private Set<TravelTheme> travelThemes;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    private String imageUrl;
+
     /** 만남 참여자 수 */
     private long participantCount = 1;
 
@@ -77,6 +83,8 @@ public class TravelGroup extends UpdatedEntity {
         this.travelGroupId = UUID.randomUUID().toString();
         this.groupName = travelGroupSaveForm.getGroupName();
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
+        this.description = travelGroupSaveForm.getDescription();
+        this.imageUrl = travelGroupSaveForm.getImageUrl();
         this.startDate = travelGroupSaveForm.getStartDate();
         this.open = travelGroupSaveForm.isOpen();
         this.limitParticipantCount =
@@ -107,6 +115,8 @@ public class TravelGroup extends UpdatedEntity {
         this.travelThemes = travelGroupModifyForm.getTravelThemes();
         this.startDate = travelGroupModifyForm.getStartDate();
         this.open = travelGroupModifyForm.isOpen();
+        this.description = travelGroupModifyForm.getDescription();
+        this.imageUrl = travelGroupModifyForm.getImageUrl();
         this.limitParticipantCount =
             travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }

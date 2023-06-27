@@ -20,6 +20,12 @@ public class TravelGroupSaveForm {
     @NotEmpty(message = "여행 테마를 하나 이상 선택 해 주세요.")
     private Set<TravelTheme> travelThemes;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    private String imageUrl;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @NotNull(message = "모임 시작일자를 선택해 주세요.")
     private String startDate;
