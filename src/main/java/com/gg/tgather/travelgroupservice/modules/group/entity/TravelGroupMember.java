@@ -41,6 +41,7 @@ public class TravelGroupMember {
     /** 유저 승인 여부 */
     private boolean approved;
     /** 닉네임 */
+    @Column(unique = true)
     private String nickname;
     /** 프로필 이미지 */
     private String profileImage;
