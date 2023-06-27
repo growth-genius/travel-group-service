@@ -22,6 +22,12 @@ public class TravelGroupDto {
     /** 여행그룹명 */
     private String groupName;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    private String imageUrl;
+
     /** 여행테마 */
     private Set<TravelTheme> travelThemes;
 
@@ -30,12 +36,22 @@ public class TravelGroupDto {
     /** 총참여자수 */
     private int totalMember;
 
+    /** 나이 제한 범위 시작 */
+    private int limitAgeRangeStart = 0;
+
+    /** 나이 제한 범위 마지노선 */
+    private int limitAgeRangeEnd = 0;
+
     public static TravelGroupDto from(TravelGroup travelGroup) {
         TravelGroupDto travelGroupDTO = new TravelGroupDto();
         travelGroupDTO.travelGroupId = travelGroup.getTravelGroupId();
         travelGroupDTO.groupName = travelGroup.getGroupName();
         travelGroupDTO.travelThemes = new HashSet<>(travelGroup.getTravelThemes());
         travelGroupDTO.totalMember = travelGroup.getTravelGroupMemberList().size();
+        travelGroupDTO.description = travelGroup.getDescription();
+        travelGroupDTO.imageUrl = travelGroup.getImageUrl();
+        travelGroupDTO.limitAgeRangeStart = travelGroup.getLimitAgeRangeStart();
+        travelGroupDTO.limitAgeRangeEnd = travelGroup.getLimitAgeRangeEnd();
         return travelGroupDTO;
     }
 
