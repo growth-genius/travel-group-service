@@ -30,6 +30,8 @@ public class TravelGroupMemberDto {
         this.accountId = travelGroupMember.getAccountId();
         this.approved = travelGroupMember.isApproved();
         this.travelGroupRole = travelGroupMember.getTravelGroupRole();
+        this.nickname = travelGroupMember.getNickname();
+        this.profileImage = travelGroupMember.getProfileImage();
     }
 
     public static TravelGroupMemberDto from(TravelGroupMember travelGroupMember) {
