@@ -14,6 +14,7 @@ import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupRole;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinForm;
 import com.gg.tgather.travelgroupservice.modules.group.kafka.TravelGroupKafkaProducer;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
@@ -46,11 +47,11 @@ public class TravelGroupMemberService {
      * @param authentication 계정정보
      * @return boolean 여행그룹 가입 요청 결과
      */
-    public TravelGroupMemberDto requestTravelGroupJoin(String travelGroupId, JwtAuthentication authentication) {
+    public TravelGroupMemberDto requestTravelGroupJoin(String travelGroupId, TravelGroupJoinForm travelGroupJoinForm, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(travelGroupId)
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
         TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, authentication.accountId(),
-            validTravelGroup(travelGroup, authentication));
+            validTravelGroup(travelGroup, authentication), travelGroupJoinForm);
         travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupMemberDto.from(travelGroupMember);
     }
@@ -68,7 +69,7 @@ public class TravelGroupMemberService {
             log.error("travelGroup is already deleted : {}", travelGroup.getGroupName());
             throw new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다.");
         }
-        
+
         AccountDto accountDto = accountServiceClient.getAccount(authentication.accountId());
         if (travelGroup.getLimitAgeRangeStart() != 0 && travelGroup.getLimitAgeRangeStart() < accountDto.getAge()
             || travelGroup.getLimitAgeRangeEnd() < accountDto.getAge()) {

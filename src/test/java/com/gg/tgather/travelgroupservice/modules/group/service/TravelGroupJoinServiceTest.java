@@ -12,6 +12,7 @@ import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthenticatio
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinTestForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
@@ -69,7 +70,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest implements Ab
     }
 
     private void travelGroupAddMember(TravelGroup travelGroup, boolean approved) {
-        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", approved);
+        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", approved, TravelGroupJoinTestForm.from());
         travelGroupMemberRepository.save(travelGroupMember);
         assertEquals(travelGroup, travelGroupMember.getTravelGroup());
     }
@@ -84,7 +85,7 @@ class TravelGroupJoinServiceTest extends AbstractContainerBaseTest implements Ab
 
     @NotNull
     private TravelGroupMember saveTravelGroupLeader(TravelGroup travelGroup) {
-        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId());
+        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId(), "뿜빰", "");
         travelGroupMemberRepository.save(travelGroupLeader);
         return travelGroupLeader;
     }

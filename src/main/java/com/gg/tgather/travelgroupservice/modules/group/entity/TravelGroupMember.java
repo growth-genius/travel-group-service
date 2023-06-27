@@ -1,6 +1,7 @@
 package com.gg.tgather.travelgroupservice.modules.group.entity;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,49 +40,31 @@ public class TravelGroupMember {
     private TravelGroupRole travelGroupRole;
     /** 유저 승인 여부 */
     private boolean approved;
+    /** 닉네임 */
+    @Column(unique = true)
+    private String nickname;
+    /** 프로필 이미지 */
+    private String profileImage;
 
-    private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole) {
+    private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole, String nickname, String profileImage) {
         this.travelGroupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
         this.approved = TravelGroupRole.LEADER.equals(travelGroupRole) || travelGroup.isOpen();
     }
 
-    private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole, boolean approved) {
+    private TravelGroupMember(TravelGroup travelGroup, String accountId, TravelGroupRole travelGroupRole, boolean approved, String nickname,
+        String profileImage) {
         this.travelGroupMemberId = UUID.randomUUID().toString();
         this.travelGroup = travelGroup;
         this.accountId = accountId;
         this.travelGroupRole = travelGroupRole;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
         this.approved = approved;
-    }
-
-    /**
-     * 여행그룹 멤버 리더 추가
-     *
-     * @param travelGroup 여행그룹명
-     * @param accountId   계정 아이디
-     * @return 여행그룹 리더
-     */
-    private static TravelGroupMember of(TravelGroup travelGroup, String accountId) {
-        return new TravelGroupMember(travelGroup, accountId, TravelGroupRole.LEADER);
-    }
-
-    private static TravelGroupMember of(TravelGroup travelGroup, String accountId, boolean approved) {
-        return new TravelGroupMember(travelGroup, accountId, TravelGroupRole.USER, approved);
-    }
-
-    /**
-     * 여행그룹 방장 추가
-     *
-     * @param travelGroup 여행그룹
-     * @param accountId   계정정보
-     * @return TravelGroupMember 여행그룹 가입 신청 방장
-     */
-    public static TravelGroupMember createTravelGroupLeader(TravelGroup travelGroup, String accountId) {
-        TravelGroupMember travelGroupMember = of(travelGroup, accountId);
-        travelGroup.getTravelGroupMemberList().add(travelGroupMember);
-        return travelGroupMember;
     }
 
     /**
@@ -92,12 +75,41 @@ public class TravelGroupMember {
      * @param approved    가입승인여부
      * @return TravelGroupMember 여행그룹에 가입 신청 유저
      */
-    public static TravelGroupMember joinTravelGroupMember(TravelGroup travelGroup, String accountId, boolean approved) {
-        TravelGroupMember travelGroupMember = of(travelGroup, accountId, approved);
+    public static TravelGroupMember joinTravelGroupMember(TravelGroup travelGroup, String accountId, boolean approved,
+        TravelGroupJoinForm travelGroupJoinForm) {
+        TravelGroupMember travelGroupMember = of(travelGroup, accountId, approved, travelGroupJoinForm.getNickname(), travelGroupJoinForm.getProfileImage());
         if (!travelGroupMember.addMember()) {
             throw new OmittedRequireFieldException("여행그룹에 참여할 수 없습니다.");
         }
         return travelGroupMember;
+    }
+
+    private static TravelGroupMember of(TravelGroup travelGroup, String accountId, boolean approved, String nickname, String profileImage) {
+        return new TravelGroupMember(travelGroup, accountId, TravelGroupRole.USER, approved, nickname, profileImage);
+    }
+
+    /**
+     * 여행그룹 방장 추가
+     *
+     * @param travelGroup 여행그룹
+     * @param accountId   계정정보
+     * @return TravelGroupMember 여행그룹 가입 신청 방장
+     */
+    public static TravelGroupMember createTravelGroupLeader(TravelGroup travelGroup, String accountId, String nickname, String profileImage) {
+        TravelGroupMember travelGroupMember = of(travelGroup, accountId, nickname, profileImage);
+        travelGroup.getTravelGroupMemberList().add(travelGroupMember);
+        return travelGroupMember;
+    }
+
+    /**
+     * 여행그룹 멤버 리더 추가
+     *
+     * @param travelGroup 여행그룹명
+     * @param accountId   계정 아이디
+     * @return 여행그룹 리더
+     */
+    private static TravelGroupMember of(TravelGroup travelGroup, String accountId, String nickname, String profileImage) {
+        return new TravelGroupMember(travelGroup, accountId, TravelGroupRole.LEADER, nickname, profileImage);
     }
 
     public boolean addMember() {

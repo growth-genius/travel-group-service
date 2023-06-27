@@ -43,7 +43,7 @@ public class TravelGroupService {
     private final TravelGroupRepository travelGroupRepository;
 
     private final TravelGroupMemberRepository travelGroupMemberRepository;
-
+    
     /**
      * 여행그룹 생성
      *
@@ -55,7 +55,8 @@ public class TravelGroupService {
         validTravelGroup(travelGroupSaveForm.getGroupName());
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
-        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, authentication.accountId());
+        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, authentication.accountId(),
+            travelGroupSaveForm.getNickname(), travelGroupSaveForm.getProfileImage());
         travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupDto.from(travelGroup);
     }

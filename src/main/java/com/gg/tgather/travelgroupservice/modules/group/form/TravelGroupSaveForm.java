@@ -48,6 +48,12 @@ public class TravelGroupSaveForm {
     /** 참여자 제한 수 */
     private int limitParticipantCount = 999;
 
+    /** 닉네임 */
+    private String nickname;
+
+    /** 프로필 이미지 */
+    private String profileImage;
+
     /** 테스트용도 생성자 */
     private TravelGroupSaveForm(String travelGroupName, Set<TravelTheme> travelThemes, String startDate) {
         this.groupName = travelGroupName;
