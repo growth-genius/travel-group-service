@@ -66,6 +66,11 @@ public class TravelGroup extends UpdatedEntity {
     /** 참여자 수 제한 **/
     private long limitParticipantCount;
 
+    /** 나이 제한 시작 */
+    private int limitAgeRangeStart;
+    /** 나이 제한 종료 */
+    private int limitAgeRangeEnd;
+
     /** 여행 시작일 */
     private String startDate;
 
@@ -87,6 +92,8 @@ public class TravelGroup extends UpdatedEntity {
         this.imageUrl = travelGroupSaveForm.getImageUrl();
         this.startDate = travelGroupSaveForm.getStartDate();
         this.open = travelGroupSaveForm.isOpen();
+        this.limitAgeRangeStart = travelGroupSaveForm.isLimitedAge() ? travelGroupSaveForm.getLimitAgeRangeStart() : 0;
+        this.limitAgeRangeEnd = travelGroupSaveForm.isLimitedAge() ? travelGroupSaveForm.getLimitAgeRangeEnd() : 0;
         this.limitParticipantCount =
             travelGroupSaveForm.isLimitedParticipant() ? travelGroupSaveForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
@@ -117,6 +124,8 @@ public class TravelGroup extends UpdatedEntity {
         this.open = travelGroupModifyForm.isOpen();
         this.description = travelGroupModifyForm.getDescription();
         this.imageUrl = travelGroupModifyForm.getImageUrl();
+        this.limitAgeRangeStart = travelGroupModifyForm.isLimitedAge() ? travelGroupModifyForm.getLimitAgeRangeStart() : 0;
+        this.limitAgeRangeEnd = travelGroupModifyForm.isLimitedAge() ? travelGroupModifyForm.getLimitAgeRangeEnd() : 0;
         this.limitParticipantCount =
             travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
