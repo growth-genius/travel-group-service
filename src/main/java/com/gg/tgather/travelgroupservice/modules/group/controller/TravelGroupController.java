@@ -8,6 +8,7 @@ import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupWithPageable;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
@@ -15,6 +16,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,6 +75,16 @@ public class TravelGroupController {
     public ApiResult<TravelGroupDto> modifyTravelGroup(@PathVariable String travelGroupId, @RequestBody @Valid TravelGroupModifyForm travelGroupModifyForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
+    }
+
+    /**
+     * 여행그룹 전체조회 API
+     *
+     * @return 여행그룹 전체 결과값
+     */
+    @GetMapping
+    public ApiResult<TravelGroupWithPageable> findAllTravelGroups(@PageableDefault(sort = "id") Pageable pageable) {
+        return success(travelGroupService.findAllTravelGroupsWithPageable(pageable));
     }
 
     /**

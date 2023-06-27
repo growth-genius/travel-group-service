@@ -7,6 +7,7 @@ import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupWithPageable;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupModifyForm;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 여행그룹 CRUD 서비스
@@ -159,6 +163,20 @@ public class TravelGroupService {
 
     public TravelGroupRegisterInitDto findRegisterInitData() {
         return TravelGroupRegisterInitDto.builder().travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
+    }
+
+    /**
+     * 여행목록 전체 조회
+     *
+     * @param pageable 페이지
+     * @return 여행그룹 전체 결과값
+     */
+    @Transactional(readOnly = true)
+    public TravelGroupWithPageable findAllTravelGroupsWithPageable(Pageable pageable) {
+        Page<TravelGroup> travelGroupList = travelGroupRepository.findAll(pageable);
+        List<TravelGroupDto> travelGroupDtoList = travelGroupList.stream().map(TravelGroupDto::from).toList();
+        return TravelGroupWithPageable.of(travelGroupDtoList, pageable.getPageNumber(), pageable.getPageSize(), travelGroupList.getTotalElements(),
+            travelGroupList.getTotalPages(), travelGroupList.isLast());
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
