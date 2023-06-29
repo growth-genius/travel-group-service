@@ -17,6 +17,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
@@ -55,6 +56,7 @@ public class TravelGroup extends UpdatedEntity {
     private String description;
 
     /** 여행그룹 이미지 */
+    @Lob
     private String imageUrl;
 
     /** 만남 참여자 수 */
@@ -68,6 +70,7 @@ public class TravelGroup extends UpdatedEntity {
 
     /** 나이 제한 시작 */
     private int limitAgeRangeStart;
+
     /** 나이 제한 종료 */
     private int limitAgeRangeEnd;
 
