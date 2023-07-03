@@ -32,8 +32,7 @@ logging:
 
 kafka:
   bootstrap-servers-config: 172.18.0.101:9092
+springdoc:
+  swagger-ui:
+    url: /api/travel-group
 
-springfox:
-  documentation:
-    swagger-ui:
-      base-url: /api/travel-group
