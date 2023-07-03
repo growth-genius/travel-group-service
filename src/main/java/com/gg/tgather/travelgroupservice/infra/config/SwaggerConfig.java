@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,8 +19,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("jwtAuth");
         Components components = new Components().addSecuritySchemes("jwtAuth",
-            new SecurityScheme().name("jwtAuth").type(Type.HTTP).scheme("bearer").bearerFormat("JWT"));
+                new SecurityScheme().name("jwtAuth").type(Type.HTTP).scheme("bearer").bearerFormat("JWT"));
 
-        return new OpenAPI().info(info).addSecurityItem(securityRequirement).components(components);
+        return new OpenAPI().info(info).addSecurityItem(securityRequirement).components(components).addServersItem(new Server().url("http://www.tpsg.co.kr:8000/api/travel-group"));
     }
 }
