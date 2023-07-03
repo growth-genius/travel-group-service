@@ -69,6 +69,17 @@ public class TravelGroupController {
         return success(travelGroupService.modifyTravelGroup(travelGroupId, travelGroupModifyForm, authentication));
     }
 
+    /**
+     * 단일 여행 그룹 조회 API
+     * 여행그룹의 디테일한 정보를 얻기 위한 목적으로 생성된 API
+     *
+     * @param authentication 계정 인증
+     * @return TravelGroupDto 여행그룹 단일 조회 결과
+     */
+    @GetMapping("/{travelGroupId}")
+    public ApiResult<TravelGroupDto> findTravelGroup(@PathVariable String travelGroupId, @AuthenticationPrincipal JwtAuthentication authentication) {
+        return success(travelGroupService.findTravelGroup(travelGroupId, authentication.accountId()));
+    }
 
     /**
      * 로그인 사용자의 여행그룹 조회
