@@ -43,7 +43,7 @@ public class TravelGroupService {
     private final TravelGroupRepository travelGroupRepository;
 
     private final TravelGroupMemberRepository travelGroupMemberRepository;
-    
+
     /**
      * 여행그룹 생성
      *
@@ -175,7 +175,7 @@ public class TravelGroupService {
     @Transactional(readOnly = true)
     public TravelGroupWithPageable findAllTravelGroupsWithPageable(Pageable pageable) {
         Page<TravelGroup> travelGroupList = travelGroupRepository.findAll(pageable);
-        List<TravelGroupDto> travelGroupDtoList = travelGroupList.stream().map(TravelGroupDto::from).toList();
+        List<TravelGroupDto> travelGroupDtoList = travelGroupList.stream().map(TravelGroupDto::fromLeader).toList();
         return TravelGroupWithPageable.of(travelGroupDtoList, pageable.getPageNumber(), pageable.getPageSize(), travelGroupList.getTotalElements(),
             travelGroupList.getTotalPages(), travelGroupList.isLast());
     }
