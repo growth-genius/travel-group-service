@@ -44,8 +44,8 @@ public class TravelGroupService {
 
     private final TravelGroupRepository travelGroupRepository;
 
-    private final TravelGroupMemberRepository travelGroupMemberRepository;<<<<<<<HEAD=======
-    private final AccountServiceClient accountServiceClient;>>>>>>>4cdfbd2 (fix : conflict solve)
+    private final TravelGroupMemberRepository travelGroupMemberRepository;
+    private final AccountServiceClient accountServiceClient;
 
     /**
      * 여행그룹 생성
@@ -58,9 +58,8 @@ public class TravelGroupService {
         validTravelGroup(travelGroupSaveForm.getGroupName());
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
-        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup,
-                authentication.accountId(),
-                travelGroupSaveForm.getNickname(), travelGroupSaveForm.getProfileImage());
+        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, authentication.accountId(),
+            travelGroupSaveForm.getNickname(), travelGroupSaveForm.getProfileImage());
         travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupDto.from(travelGroup);
     }
@@ -94,11 +93,9 @@ public class TravelGroupService {
      * @param authentication        인증정보
      * @return TravelGroupDto travelGroup 수정 결과
      */
-    public TravelGroupDto modifyTravelGroup(String travelGroupId, TravelGroupModifyForm travelGroupModifyForm,
-            JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository
-                .searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
-                .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
+    public TravelGroupDto modifyTravelGroup(String travelGroupId, TravelGroupModifyForm travelGroupModifyForm, JwtAuthentication authentication) {
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
+            .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
         validTravelGroupWithoutOwn(travelGroupModifyForm.getGroupName(), travelGroup.getTravelGroupId());
         travelGroup.modifyTravelGroup(travelGroupModifyForm);
         return TravelGroupDto.from(travelGroup);
@@ -124,9 +121,8 @@ public class TravelGroupService {
      * @return boolean 삭제 여부
      */
     public Boolean deleteTravelGroup(String travelGroupId, JwtAuthentication authentication) {
-        TravelGroup travelGroup = travelGroupRepository
-                .searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
-                .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
+        TravelGroup travelGroup = travelGroupRepository.searchByTravelGroupAndLeader(travelGroupId, authentication.accountId())
+            .orElseThrow(() -> new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다."));
         travelGroup.deleteTravelGroup();
         return true;
     }
@@ -147,10 +143,8 @@ public class TravelGroupService {
         List<TravelGroupDto> travelGroupDtoList = new ArrayList<>();
         for (String travelGroupId : travelGroupSearch.travelGroupIds()) {
             TravelGroupDto travelGroupDto = TravelGroupDto.of(travelGroupId);
-            Map<TravelTheme, List<TravelGroupSearchVo>> themeListMap = travelGroupSearch.travelGroupSearchVoList()
-                    .stream()
-                    .filter(t -> t.getTravelGroupId().equals(travelGroupId))
-                    .collect(Collectors.groupingBy(TravelGroupSearchVo::getTravelTheme));
+            Map<TravelTheme, List<TravelGroupSearchVo>> themeListMap = travelGroupSearch.travelGroupSearchVoList().stream()
+                .filter(t -> t.getTravelGroupId().equals(travelGroupId)).collect(Collectors.groupingBy(TravelGroupSearchVo::getTravelTheme));
             for (Entry<TravelTheme, List<TravelGroupSearchVo>> travelThemeListEntry : themeListMap.entrySet()) {
                 travelGroupDto.addTravelTheme(travelThemeListEntry.getKey());
                 for (List<TravelGroupSearchVo> members : themeListMap.values()) {
@@ -167,14 +161,12 @@ public class TravelGroupService {
     @NotNull
     private TravelGroupSearch getTravelGroupSearch(String accountId) {
         List<TravelGroupSearchVo> travelGroupSearchVoList = travelGroupRepository.searchTravelGroupAllByMe(accountId);
-        List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct()
-                .map(TravelGroupSearchVo::getTravelGroupId).toList();
+        List<String> travelGroupIds = travelGroupSearchVoList.stream().distinct().map(TravelGroupSearchVo::getTravelGroupId).toList();
         return TravelGroupSearch.of(travelGroupSearchVoList, travelGroupIds);
     }
 
     public TravelGroupRegisterInitDto findRegisterInitData() {
-        return TravelGroupRegisterInitDto.builder()
-                .travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
+        return TravelGroupRegisterInitDto.builder().travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     /**
@@ -187,9 +179,8 @@ public class TravelGroupService {
     public TravelGroupWithPageable findAllTravelGroupsWithPageable(Pageable pageable) {
         Page<TravelGroup> travelGroupList = travelGroupRepository.findAll(pageable);
         List<TravelGroupDto> travelGroupDtoList = travelGroupList.stream().map(TravelGroupDto::from).toList();
-        return TravelGroupWithPageable.of(travelGroupDtoList, pageable.getPageNumber(), pageable.getPageSize(),
-                travelGroupList.getTotalElements(),
-                travelGroupList.getTotalPages(), travelGroupList.isLast());
+        return TravelGroupWithPageable.of(travelGroupDtoList, pageable.getPageNumber(), pageable.getPageSize(), travelGroupList.getTotalElements(),
+            travelGroupList.getTotalPages(), travelGroupList.isLast());
     }
 
     /**
@@ -214,8 +205,7 @@ public class TravelGroupService {
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
 
-        public static TravelGroupSearch of(List<TravelGroupSearchVo> travelGroupSearchVoList,
-                List<String> travelGroupIds) {
+        public static TravelGroupSearch of(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
             return new TravelGroupSearch(travelGroupSearchVoList, travelGroupIds);
         }
     }
