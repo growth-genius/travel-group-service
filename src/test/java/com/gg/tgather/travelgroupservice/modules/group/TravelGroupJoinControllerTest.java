@@ -14,6 +14,7 @@ import com.gg.tgather.travelgroupservice.infra.security.WithMockJwtAuthenticatio
 import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinTestForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
@@ -46,7 +47,7 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
         assertTrue(opTravelGroup.isPresent());
         TravelGroupMember travelGroupLeader = saveTravelGroupLeader(travelGroup);
         assertEquals(travelGroup, travelGroupLeader.getTravelGroup());
-        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", false);
+        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", false, TravelGroupJoinTestForm.from());
         travelGroupMemberRepository.save(travelGroupMember);
         assertEquals(travelGroup, travelGroupMember.getTravelGroup());
         return travelGroup;
@@ -57,10 +58,10 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
     void privateTravelGroupRequestMembers() throws Exception {
         // given
         TravelGroup travelGroup = savePrivateTravelGroupTest();
-        mockMvc.perform(get("/travel-group/group-id/{travelGroupId}/status/{status}/members", travelGroup.getTravelGroupId(), NO_APPROVED).contentType(
-                MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray())
-            .andExpect(jsonPath("$.response[0].accountId").value("Member")).andExpect(jsonPath("$.response[0].approved").isBoolean())
-            .andExpect(jsonPath("$.response[0].approved").value(false));
+        mockMvc.perform(
+                get("/group-id/{travelGroupId}/status/{status}/members", travelGroup.getTravelGroupId(), NO_APPROVED).contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk()).andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].accountId").value("Member"))
+            .andExpect(jsonPath("$.response[0].approved").isBoolean()).andExpect(jsonPath("$.response[0].approved").value(false));
     }
 
 
@@ -71,14 +72,14 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
         savePrivateTravelGroupTest();
         // when
         // then
-        mockMvc.perform(get("/travel-group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
+        mockMvc.perform(get("/group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
             .andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].groupName").value("Travel"));
 
     }
 
     @NotNull
     private TravelGroupMember saveTravelGroupLeader(TravelGroup travelGroup) {
-        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId());
+        TravelGroupMember travelGroupLeader = TravelGroupMember.createTravelGroupLeader(travelGroup, getCommonAuthentication().accountId(), "빰빰", "");
         travelGroupMemberRepository.save(travelGroupLeader);
         return travelGroupLeader;
     }

@@ -11,6 +11,7 @@ import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthenticatio
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinTestForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
@@ -46,7 +47,7 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         travelGroupSaveForm.setOpen(true);
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
-        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, "TEST-ACCOUNT-ID");
+        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, "TEST-ACCOUNT-ID", "뿜뿜", "");
         travelGroupMemberRepository.save(travelGroupMember);
         return travelGroup;
     }
@@ -58,7 +59,7 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
      * @param travelGroup 여행그룹
      */
     private TravelGroupMember travelGroupAddMember(TravelGroup travelGroup) {
-        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", true);
+        TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, "Member", true, TravelGroupJoinTestForm.from());
         travelGroupMemberRepository.save(travelGroupMember);
         assertEquals(travelGroup, travelGroupMember.getTravelGroup());
         return travelGroupMember;
@@ -70,7 +71,8 @@ class TravelGroupMemberServiceTest extends AbstractContainerBaseTest implements 
         // given
         TravelGroup travelGroup = createPublicTravelGroup();
         // when
-        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(), getCommonAuthentication());
+        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(),
+            TravelGroupJoinTestForm.from(), getCommonAuthentication());
         Optional<TravelGroup> validTravelGroup = travelGroupRepository.findById(travelGroup.getId());
         assertTrue(validTravelGroup.isPresent());
         // then

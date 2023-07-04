@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.group;
+package com.gg.tgather.travelgroupservice.modules.group.controller;
 
 
 import static com.gg.tgather.commonservice.utils.ApiUtil.success;
@@ -7,13 +7,13 @@ import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinForm;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 여행그룹 유저 참여 관련 API
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 2023.06.07
  */
 @RestBaseAnnotation
-@RequestMapping("/travel-group")
 @RequiredArgsConstructor
 public class TravelGroupMemberController {
 
@@ -36,9 +35,9 @@ public class TravelGroupMemberController {
      * @return TravelGroupMemberDto 여행 그룹 가입
      */
     @PostMapping("/{travelGroupId}/member")
-    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId,
+    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId, TravelGroupJoinForm travelGroupJoinForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
-        return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, authentication));
+        return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, travelGroupJoinForm, authentication));
     }
 
     /**

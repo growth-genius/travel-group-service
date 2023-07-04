@@ -12,6 +12,7 @@ import com.gg.tgather.travelgroupservice.modules.common.AbstractJwtAuthenticatio
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
+import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupJoinTestForm;
 import com.gg.tgather.travelgroupservice.modules.group.form.TravelGroupSaveForm;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
@@ -53,7 +54,8 @@ class TravelGroupKafkaTest implements AbstractJwtAuthentication {
         TravelGroup travelGroup = createPrivateTravelGroup();
         when(accountServiceClient.getAccount(getCommonAuthentication().accountId())).thenReturn(defaultAccount());
         // when
-        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(), getCommonAuthentication());
+        TravelGroupMemberDto travelGroupMemberDto = travelGroupMemberService.requestTravelGroupJoin(travelGroup.getTravelGroupId(),
+            TravelGroupJoinTestForm.from(), getCommonAuthentication());
         // then
         assertFalse(travelGroupMemberDto.isApproved());
     }
@@ -69,7 +71,7 @@ class TravelGroupKafkaTest implements AbstractJwtAuthentication {
         travelGroupSaveForm.setOpen(false);
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
-        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, "TEST-ACCOUNT-ID");
+        TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, "TEST-ACCOUNT-ID", "뿜빰뿜", "");
         travelGroupMemberRepository.save(travelGroupMember);
         return travelGroup;
     }

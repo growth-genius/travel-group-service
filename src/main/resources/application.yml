@@ -30,8 +30,13 @@ eureka:
 
 logging:
   level:
-    com.gg.accountservice: DEBUG
+    com.gg.tgather.travelgroupservice: DEBUG
 
 
 kafka:
   bootstrap-servers-config: 172.0.0.1:9092
+
+
+swagger:
+  servers:
+    - http://www.tpsg.co.kr:8000/api/travel-group

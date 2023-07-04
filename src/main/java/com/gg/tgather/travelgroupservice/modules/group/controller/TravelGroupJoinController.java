@@ -1,4 +1,4 @@
-package com.gg.tgather.travelgroupservice.modules.group;
+package com.gg.tgather.travelgroupservice.modules.group.controller;
 
 import static com.gg.tgather.commonservice.utils.ApiUtil.success;
 
@@ -13,10 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestBaseAnnotation
-@RequestMapping("/travel-group")
 @RequiredArgsConstructor
 public class TravelGroupJoinController {
 

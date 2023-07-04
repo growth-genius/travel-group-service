@@ -17,6 +17,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.NamedAttributeNode;
 import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
@@ -51,6 +52,13 @@ public class TravelGroup extends UpdatedEntity {
     @CollectionTable(name = "travel_themes", joinColumns = @JoinColumn(name = "travel_group_id"))
     private Set<TravelTheme> travelThemes;
 
+    /** 여행그룹 설명 */
+    private String description;
+
+    /** 여행그룹 이미지 */
+    @Lob
+    private String imageUrl;
+
     /** 만남 참여자 수 */
     private long participantCount = 1;
 
@@ -59,6 +67,12 @@ public class TravelGroup extends UpdatedEntity {
 
     /** 참여자 수 제한 **/
     private long limitParticipantCount;
+
+    /** 나이 제한 시작 */
+    private int limitAgeRangeStart;
+
+    /** 나이 제한 종료 */
+    private int limitAgeRangeEnd;
 
     /** 여행 시작일 */
     private String startDate;
@@ -77,8 +91,12 @@ public class TravelGroup extends UpdatedEntity {
         this.travelGroupId = UUID.randomUUID().toString();
         this.groupName = travelGroupSaveForm.getGroupName();
         this.travelThemes = travelGroupSaveForm.getTravelThemes();
+        this.description = travelGroupSaveForm.getDescription();
+        this.imageUrl = travelGroupSaveForm.getImageUrl();
         this.startDate = travelGroupSaveForm.getStartDate();
         this.open = travelGroupSaveForm.isOpen();
+        this.limitAgeRangeStart = travelGroupSaveForm.isLimitedAge() ? travelGroupSaveForm.getLimitAgeRangeStart() : 0;
+        this.limitAgeRangeEnd = travelGroupSaveForm.isLimitedAge() ? travelGroupSaveForm.getLimitAgeRangeEnd() : 0;
         this.limitParticipantCount =
             travelGroupSaveForm.isLimitedParticipant() ? travelGroupSaveForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
@@ -107,6 +125,10 @@ public class TravelGroup extends UpdatedEntity {
         this.travelThemes = travelGroupModifyForm.getTravelThemes();
         this.startDate = travelGroupModifyForm.getStartDate();
         this.open = travelGroupModifyForm.isOpen();
+        this.description = travelGroupModifyForm.getDescription();
+        this.imageUrl = travelGroupModifyForm.getImageUrl();
+        this.limitAgeRangeStart = travelGroupModifyForm.isLimitedAge() ? travelGroupModifyForm.getLimitAgeRangeStart() : 0;
+        this.limitAgeRangeEnd = travelGroupModifyForm.isLimitedAge() ? travelGroupModifyForm.getLimitAgeRangeEnd() : 0;
         this.limitParticipantCount =
             travelGroupModifyForm.isLimitedParticipant() ? travelGroupModifyForm.getLimitParticipantCount() : MAX_PARTICIPANT_COUNT.getCount();
     }
