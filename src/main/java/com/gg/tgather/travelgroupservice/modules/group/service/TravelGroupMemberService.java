@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
 import com.gg.tgather.commonservice.dto.account.AccountDto;
-import com.gg.tgather.commonservice.dto.fcm.FcmMessageDto;
+import com.gg.tgather.commonservice.dto.mail.EmailMessage;
+import com.gg.tgather.commonservice.dto.mail.MailSubject;
 import com.gg.tgather.commonservice.properties.KafkaFcmTopicProperties;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.client.AccountServiceClient;
-import com.gg.tgather.travelgroupservice.modules.group.dto.FcmContentDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroupMember;
@@ -56,6 +56,7 @@ public class TravelGroupMemberService {
             .filter(travelGroupMember -> travelGroupMember.getAccountId().equals(authentication.accountId())).findAny();
 
         if (isExistedAccount.isPresent()) {
+            log.error("이미 가입한 여행그룹입니다.");
             throw new OmittedRequireFieldException("이미 가입한 여행그룹입니다.");
         }
 
@@ -87,7 +88,7 @@ public class TravelGroupMemberService {
 
         if (!travelGroup.isOpen()) {
             try {
-                return sendFcmMessage(travelGroup, accountDto);
+                return sendMailTopic(travelGroup, accountDto);
             } catch (JsonProcessingException ex) {
                 log.error("Failed to JsonProcessing");
                 throw new OmittedRequireFieldException(ex.getMessage());
@@ -113,13 +114,22 @@ public class TravelGroupMemberService {
      * @return boolean 여행그룹 가입 대기
      * @throws JsonProcessingException
      */
-    private boolean sendFcmMessage(TravelGroup travelGroup, AccountDto accountDto) throws JsonProcessingException {
-        FcmMessageDto fcmMessageDto = new FcmMessageDto();
-        fcmMessageDto.setTitle(travelGroup.getGroupName() + "가입 요청");
-        fcmMessageDto.setToken(accountDto.getFcmToken());
-        String fcmContent = objectMapper.writeValueAsString(FcmContentDto.createFcmContentDto(travelGroup.getTravelGroupId(), travelGroup.getGroupName()));
-        fcmMessageDto.setMessage(fcmContent);
-        travelGroupKafkaProducer.send(kafkaFcmTopicProperties.getSendSingleFcmTopic(), fcmMessageDto);
+    private boolean sendMailTopic(TravelGroup travelGroup, AccountDto accountDto) throws JsonProcessingException {
+
+        Optional<TravelGroupMember> travelGroupLeader = travelGroup.getTravelGroupMemberList().stream()
+            .filter(travelGroupMember -> travelGroupMember.getTravelGroupRole().equals(TravelGroupRole.LEADER)).findAny();
+
+        if (travelGroupLeader.isEmpty()) {
+            throw new OmittedRequireFieldException("여행그룹 참여 요청 메일을 보낼 수 없습니다.");
+        }
+        AccountDto leaderAccountDto = accountServiceClient.getAccount(travelGroupLeader.get().getAccountId());
+
+        EmailMessage emailMessage = new EmailMessage();
+        emailMessage.setMailSubject(MailSubject.CONFIRM_JOIN_MEMBER);
+        emailMessage.setTo(leaderAccountDto.getEmail());
+        emailMessage.setAccountId(accountDto.getAccountId());
+        emailMessage.setMessage(travelGroup.getGroupName() + " 가입 요청");
+        travelGroupKafkaProducer.send(kafkaFcmTopicProperties.getSendSingleFcmTopic(), emailMessage);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
         return false;
     }
