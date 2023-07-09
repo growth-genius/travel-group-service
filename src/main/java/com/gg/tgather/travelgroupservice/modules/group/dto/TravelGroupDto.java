@@ -62,6 +62,7 @@ public class TravelGroupDto {
     public static TravelGroupDto from(TravelGroup travelGroup) {
         TravelGroupDto travelGroupDto = createTravelGroup(travelGroup);
         travelGroupDto.travelGroupMemberDtoList = travelGroup.getTravelGroupMemberList().stream().map(TravelGroupMemberDto::from).collect(Collectors.toList());
+        travelGroupDto.totalMember = travelGroup.getTravelGroupMemberList().size();
         return travelGroupDto;
     }
 
