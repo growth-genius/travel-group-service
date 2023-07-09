@@ -52,10 +52,9 @@ public class TravelGroupMemberService {
         TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(travelGroupId)
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
 
-        Optional<TravelGroupMember> isExistedAccount = travelGroup.getTravelGroupMemberList().stream()
-            .filter(travelGroupMember -> travelGroupMember.getAccountId().equals(authentication.accountId())).findAny();
-
-        if (isExistedAccount.isPresent()) {
+        List<TravelGroupMember> isExistedAccount = travelGroupMemberRepository.findByTravelGroupId(travelGroup.getId()).stream()
+            .filter(travelGroupMember -> travelGroupMember.getAccountId().equals(authentication.accountId())).toList();
+        if (!isExistedAccount.isEmpty()) {
             log.error("이미 가입한 여행그룹입니다.");
             throw new OmittedRequireFieldException("이미 가입한 여행그룹입니다.");
         }
@@ -129,7 +128,7 @@ public class TravelGroupMemberService {
         emailMessage.setTo(leaderAccountDto.getEmail());
         emailMessage.setAccountId(accountDto.getAccountId());
         emailMessage.setMessage(travelGroup.getGroupName() + " 가입 요청");
-        travelGroupKafkaProducer.send(kafkaTravelGroupTopicProperties.getSendRequestJoinTravelGroupTopic() emailMessage);
+        travelGroupKafkaProducer.send(kafkaTravelGroupTopicProperties.getSendRequestJoinTravelGroupTopic(), emailMessage);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
         return false;
     }
