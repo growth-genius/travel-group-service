@@ -129,7 +129,7 @@ public class TravelGroupMemberService {
         emailMessage.setTo(leaderAccountDto.getEmail());
         emailMessage.setAccountId(accountDto.getAccountId());
         emailMessage.setMessage(travelGroup.getGroupName() + " 가입 요청");
-        travelGroupKafkaProducer.send(kafkaTravelGroupTopicProperties.getSendRequestJoinTravelGroupTopic() emailMessage);
+        travelGroupKafkaProducer.send(kafkaTravelGroupTopicProperties.getSendRequestJoinTravelGroupTopic(), emailMessage);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
         return false;
     }
