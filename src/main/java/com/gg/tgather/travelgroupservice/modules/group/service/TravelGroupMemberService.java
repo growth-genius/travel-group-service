@@ -52,7 +52,7 @@ public class TravelGroupMemberService {
         TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(travelGroupId)
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
 
-        Optional<TravelGroupMember> isExistedAccount = travelGroupMemberRepository.findByAccountId(travelGroupId).stream()
+        Optional<TravelGroupMember> isExistedAccount = travelGroup.getTravelGroupMemberList().stream()
             .filter(travelGroupMember -> travelGroupMember.getAccountId().equals(authentication.accountId())).findAny();
 
         if (isExistedAccount.isPresent()) {
