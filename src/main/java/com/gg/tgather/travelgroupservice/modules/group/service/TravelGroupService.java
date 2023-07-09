@@ -200,7 +200,7 @@ public class TravelGroupService {
         if (optionalTravelGroup.isEmpty()) {
             throw new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다.");
         }
-        return TravelGroupDto.from(optionalTravelGroup.get());
+        return TravelGroupDto.fromLeader(optionalTravelGroup.get());
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
