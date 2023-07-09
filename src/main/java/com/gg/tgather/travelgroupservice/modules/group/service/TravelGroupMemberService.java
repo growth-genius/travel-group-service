@@ -19,6 +19,7 @@ import com.gg.tgather.travelgroupservice.modules.group.kafka.TravelGroupKafkaPro
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupMemberRepository;
 import com.gg.tgather.travelgroupservice.modules.group.repository.TravelGroupRepository;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,6 +51,14 @@ public class TravelGroupMemberService {
     public TravelGroupMemberDto requestTravelGroupJoin(String travelGroupId, TravelGroupJoinForm travelGroupJoinForm, JwtAuthentication authentication) {
         TravelGroup travelGroup = travelGroupRepository.searchTravelGroupByIdWithLeader(travelGroupId)
             .orElseThrow(() -> new OmittedRequireFieldException("요청하신 여행그룹을 찾을 수 없습니다."));
+
+        Optional<TravelGroupMember> isExistedAccount = travelGroupMemberRepository.findByAccountId(travelGroupId).stream()
+            .filter(travelGroupMember -> travelGroupMember.getAccountId().equals(authentication.accountId())).findAny();
+
+        if (isExistedAccount.isPresent()) {
+            throw new OmittedRequireFieldException("이미 가입한 여행그룹입니다.");
+        }
+
         TravelGroupMember travelGroupMember = TravelGroupMember.joinTravelGroupMember(travelGroup, authentication.accountId(),
             validTravelGroup(travelGroup, authentication), travelGroupJoinForm);
         travelGroupMemberRepository.save(travelGroupMember);
