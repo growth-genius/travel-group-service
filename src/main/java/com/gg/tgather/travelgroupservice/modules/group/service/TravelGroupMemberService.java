@@ -7,7 +7,7 @@ import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
 import com.gg.tgather.commonservice.dto.account.AccountDto;
 import com.gg.tgather.commonservice.dto.mail.EmailMessage;
 import com.gg.tgather.commonservice.dto.mail.MailSubject;
-import com.gg.tgather.commonservice.properties.KafkaFcmTopicProperties;
+import com.gg.tgather.commonservice.properties.KafkaTravelGroupTopicProperties;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.client.AccountServiceClient;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupMemberDto;
@@ -37,7 +37,7 @@ public class TravelGroupMemberService {
     private final TravelGroupRepository travelGroupRepository;
     private final TravelGroupMemberRepository travelGroupMemberRepository;
     private final TravelGroupKafkaProducer travelGroupKafkaProducer;
-    private final KafkaFcmTopicProperties kafkaFcmTopicProperties;
+    private final KafkaTravelGroupTopicProperties kafkaTravelGroupTopicProperties;
     private final AccountServiceClient accountServiceClient;
     private final ObjectMapper objectMapper;
 
@@ -129,7 +129,7 @@ public class TravelGroupMemberService {
         emailMessage.setTo(leaderAccountDto.getEmail());
         emailMessage.setAccountId(accountDto.getAccountId());
         emailMessage.setMessage(travelGroup.getGroupName() + " 가입 요청");
-        travelGroupKafkaProducer.send(kafkaFcmTopicProperties.getSendSingleFcmTopic(), emailMessage);
+        travelGroupKafkaProducer.send(kafkaTravelGroupTopicProperties.getSendRequestJoinTravelGroupTopic() emailMessage);
         log.info("travelGroup is private : {}", travelGroup.getGroupName());
         return false;
     }
