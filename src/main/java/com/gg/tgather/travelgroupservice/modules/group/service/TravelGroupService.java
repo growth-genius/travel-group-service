@@ -3,6 +3,7 @@ package com.gg.tgather.travelgroupservice.modules.group.service;
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
 import com.gg.tgather.commonservice.enums.EnumMapperValue;
+import com.gg.tgather.commonservice.enums.SearchTravelTheme;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.client.AccountServiceClient;
@@ -210,7 +211,7 @@ public class TravelGroupService {
      * @return TravelGroupInitDto 여행그룹 초기 데이터
      */
     public TravelGroupInitDto findInitData() {
-        return TravelGroupInitDto.builder().travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
+        return TravelGroupInitDto.builder().travelThemes(Arrays.stream(SearchTravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
