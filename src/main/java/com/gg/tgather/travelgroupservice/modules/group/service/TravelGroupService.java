@@ -7,6 +7,7 @@ import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.client.AccountServiceClient;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupWithPageable;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
@@ -201,6 +202,15 @@ public class TravelGroupService {
             throw new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다.");
         }
         return TravelGroupDto.fromLeader(optionalTravelGroup.get());
+    }
+
+    /**
+     * 여행그룹 Dashboard 초기 데이터
+     *
+     * @return TravelGroupInitDto 여행그룹 초기 데이터
+     */
+    public TravelGroupInitDto findInitData() {
+        return TravelGroupInitDto.builder().travelThemes(Arrays.stream(TravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {
