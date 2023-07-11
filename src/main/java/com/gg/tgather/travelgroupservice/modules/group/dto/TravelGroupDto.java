@@ -36,6 +36,8 @@ public class TravelGroupDto {
 
     private List<TravelGroupMemberDto> travelGroupMemberDtoList;
 
+    private long limitParticipantCount = 999;
+
     /** 총참여자수 */
     private int totalMember;
 
@@ -76,6 +78,7 @@ public class TravelGroupDto {
         travelGroupDto.imageUrl = travelGroup.getImageUrl();
         travelGroupDto.limitAgeRangeStart = travelGroup.getLimitAgeRangeStart();
         travelGroupDto.limitAgeRangeEnd = travelGroup.getLimitAgeRangeEnd();
+        travelGroupDto.limitParticipantCount = travelGroup.getLimitParticipantCount();
         return travelGroupDto;
     }
 
