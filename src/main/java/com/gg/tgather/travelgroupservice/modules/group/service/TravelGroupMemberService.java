@@ -1,7 +1,6 @@
 package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
 import com.gg.tgather.commonservice.dto.account.AccountDto;
@@ -39,7 +38,6 @@ public class TravelGroupMemberService {
     private final TravelGroupKafkaProducer travelGroupKafkaProducer;
     private final KafkaTravelGroupTopicProperties kafkaTravelGroupTopicProperties;
     private final AccountServiceClient accountServiceClient;
-    private final ObjectMapper objectMapper;
 
     /**
      * 여행그룹 가입 요청 처리
