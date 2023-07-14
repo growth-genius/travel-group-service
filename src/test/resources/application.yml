@@ -23,3 +23,7 @@ logging:
 
 kafka:
   bootstrap-servers-config: localhost:9092
+
+swagger:
+  servers:
+    - http://www.tpsg.co.kr:8000/api/travel-group
