@@ -2,6 +2,7 @@ package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
+import com.gg.tgather.commonservice.dto.account.AccountDto;
 import com.gg.tgather.commonservice.enums.EnumMapperValue;
 import com.gg.tgather.commonservice.enums.SearchTravelTheme;
 import com.gg.tgather.commonservice.enums.TravelTheme;
@@ -60,8 +61,11 @@ public class TravelGroupService {
         validTravelGroup(travelGroupSaveForm.getGroupName());
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
+
         TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, authentication.accountId(),
             travelGroupSaveForm.getNickname(), travelGroupSaveForm.getProfileImage());
+        AccountDto accountDto = accountServiceClient.getAccount(authentication.accountId());
+        travelGroupMember.updateProfileInfo(accountDto.getNickname(), accountDto.getProfileImage());
         travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupDto.from(travelGroup);
     }
