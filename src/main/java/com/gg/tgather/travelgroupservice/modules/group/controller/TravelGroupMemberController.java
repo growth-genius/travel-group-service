@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 여행그룹 유저 참여 관련 API
@@ -35,7 +36,7 @@ public class TravelGroupMemberController {
      * @return TravelGroupMemberDto 여행 그룹 가입
      */
     @PostMapping("/{travelGroupId}/member")
-    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId, TravelGroupJoinForm travelGroupJoinForm,
+    public ApiResult<TravelGroupMemberDto> requestTravelGroupJoin(@PathVariable String travelGroupId, @RequestBody TravelGroupJoinForm travelGroupJoinForm,
         @AuthenticationPrincipal JwtAuthentication authentication) {
         return success(travelGroupMemberService.requestTravelGroupJoin(travelGroupId, travelGroupJoinForm, authentication));
     }

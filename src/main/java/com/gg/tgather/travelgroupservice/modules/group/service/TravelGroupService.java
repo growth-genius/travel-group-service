@@ -2,11 +2,14 @@ package com.gg.tgather.travelgroupservice.modules.group.service;
 
 import com.gg.tgather.commonservice.advice.exceptions.OmittedRequireFieldException;
 import com.gg.tgather.commonservice.annotation.BaseServiceAnnotation;
+import com.gg.tgather.commonservice.dto.account.AccountDto;
 import com.gg.tgather.commonservice.enums.EnumMapperValue;
+import com.gg.tgather.commonservice.enums.SearchTravelTheme;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.security.JwtAuthentication;
 import com.gg.tgather.travelgroupservice.modules.client.AccountServiceClient;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupRegisterInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupWithPageable;
 import com.gg.tgather.travelgroupservice.modules.group.entity.TravelGroup;
@@ -58,8 +61,11 @@ public class TravelGroupService {
         validTravelGroup(travelGroupSaveForm.getGroupName());
         TravelGroup travelGroup = TravelGroup.from(travelGroupSaveForm);
         travelGroupRepository.save(travelGroup);
+
         TravelGroupMember travelGroupMember = TravelGroupMember.createTravelGroupLeader(travelGroup, authentication.accountId(),
             travelGroupSaveForm.getNickname(), travelGroupSaveForm.getProfileImage());
+        AccountDto accountDto = accountServiceClient.getAccount(authentication.accountId());
+        travelGroupMember.updateProfileInfo(accountDto.getNickname(), accountDto.getProfileImage());
         travelGroupMemberRepository.save(travelGroupMember);
         return TravelGroupDto.from(travelGroup);
     }
@@ -200,7 +206,16 @@ public class TravelGroupService {
         if (optionalTravelGroup.isEmpty()) {
             throw new OmittedRequireFieldException("여행그룹명을 찾을 수 없습니다.");
         }
-        return TravelGroupDto.from(optionalTravelGroup.get());
+        return TravelGroupDto.fromLeader(optionalTravelGroup.get());
+    }
+
+    /**
+     * 여행그룹 Dashboard 초기 데이터
+     *
+     * @return TravelGroupInitDto 여행그룹 초기 데이터
+     */
+    public TravelGroupInitDto findInitData() {
+        return TravelGroupInitDto.builder().travelThemes(Arrays.stream(SearchTravelTheme.values()).map(EnumMapperValue::new).toList()).build();
     }
 
     private record TravelGroupSearch(List<TravelGroupSearchVo> travelGroupSearchVoList, List<String> travelGroupIds) {

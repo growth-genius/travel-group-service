@@ -6,6 +6,7 @@ import com.gg.tgather.commonservice.annotation.RestBaseAnnotation;
 import com.gg.tgather.commonservice.enums.TravelTheme;
 import com.gg.tgather.commonservice.utils.ApiUtil.ApiResult;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupDto;
+import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupInitDto;
 import com.gg.tgather.travelgroupservice.modules.group.dto.TravelGroupWithPageable;
 import com.gg.tgather.travelgroupservice.modules.group.service.TravelGroupService;
 import java.util.List;
@@ -43,6 +44,14 @@ public class TravelGroupOpenController {
     @GetMapping("/all")
     public ApiResult<TravelGroupWithPageable> findAllTravelGroups(@PageableDefault(sort = "id") Pageable pageable) {
         return success(travelGroupService.findAllTravelGroupsWithPageable(pageable));
+    }
+
+    /**
+     * 여행그룹 init API
+     */
+    @GetMapping("/init")
+    public ApiResult<TravelGroupInitDto> getTravelGroupInit() {
+        return success(travelGroupService.findInitData(), "조회되었습니다.");
     }
 
 }

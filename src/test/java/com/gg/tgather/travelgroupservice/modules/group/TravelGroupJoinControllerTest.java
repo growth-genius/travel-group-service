@@ -72,7 +72,7 @@ class TravelGroupJoinControllerTest extends AbstractContainerBaseTest implements
         savePrivateTravelGroupTest();
         // when
         // then
-        mockMvc.perform(get("/group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
+        mockMvc.perform(get("/open/group?travelThemes={travelTheme}", SearchTravelTheme.ACTIVITY)).andExpect(status().isOk())
             .andExpect(jsonPath("$.response").isArray()).andExpect(jsonPath("$.response[0].groupName").value("Travel"));
 
     }
